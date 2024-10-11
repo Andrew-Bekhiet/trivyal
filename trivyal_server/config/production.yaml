@@ -30,9 +30,9 @@ webServer:
 # If you are connecting on a public IP (e.g. on AWS or Google Cloud Run), you
 # connect on the public IP of the database e.g. database.examplepod.com.
 database:
-  host: database.private-production.examplepod.com
+  host: trivyal-postgres.railway.internal
   port: 5432
-  name: serverpod
+  name: railway
   user: postgres
   requireSsl: true
 
