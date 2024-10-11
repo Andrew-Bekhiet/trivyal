@@ -19,8 +19,6 @@ COPY --from=build /app/confi[g]/ config/
 COPY --from=build /app/we[b]/ web/
 COPY --from=build /app/migration[s]/ migrations/
 
-RUN echo "a:" > config/passwords.yaml
-
 EXPOSE 8080
 EXPOSE 8081
 EXPOSE 8082
