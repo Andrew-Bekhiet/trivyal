@@ -11,12 +11,5 @@ services:
       POSTGRES_PASSWORD: "ATFqRIyGah8Zu9oANGEGUjawqnQ7fygb"
     volumes:
       - trivyal_data:/var/lib/postgresql/data
-  redis:
-    image: redis:6.2.6
-    ports:
-      - '8091:6379'
-    command: redis-server --requirepass "hCrtOmk-fn9JrkvhOeMb7l07-05Pa986"
-    environment:
-      - REDIS_REPLICATION_MODE=master
 volumes:
   trivyal_data:
