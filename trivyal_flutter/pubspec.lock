@@ -244,26 +244,26 @@ packages:
     dependency: transitive
     description:
       name: serverpod_client
-      sha256: "3b4053558cda2072d95e614d8be65263daceadc81ca7b3e179669ec4008c44e2"
+      sha256: "0db2d7532ac891b85c9531c1b743712770756392e57c61e17742614eaa394eea"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.3"
+    version: "2.1.4"
   serverpod_flutter:
     dependency: "direct main"
     description:
       name: serverpod_flutter
-      sha256: "83bfb9222546203a539f1f1f60c317d6c91841c31451317babfa011be8af02c8"
+      sha256: "5943e71ee523bc329b4ad979b018682a028b89db933c7db426b6280255e39c5c"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.3"
+    version: "2.1.4"
   serverpod_serialization:
     dependency: transitive
     description:
       name: serverpod_serialization
-      sha256: f65ef4dd1105da71e61ff3e13289a531c5ed26f7ab5c8a4342ce5724dfa1b88c
+      sha256: b90869587bbad4dc91fb762231790648cd5978d4dca23757a7ae962c0345c879
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.3"
+    version: "2.1.4"
   sky_engine:
     dependency: transitive
     description: flutter
