@@ -98,7 +98,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   label: 'Sign in or sign up with Google',
                   serverClientId: googleServerClientId,
-                  // clientId: googleServerClientId,
                   redirectUri: Uri.parse(ref.watch(serverWebServerUrlProvider))
                       .replace(pathSegments: ['googleSignIn']),
                   caller: client.modules.auth,
