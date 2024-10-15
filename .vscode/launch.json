@@ -1,0 +1,36 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "trivyal_flutter",
+      "cwd": "trivyal_flutter",
+      "request": "launch",
+      "args": ["--web-port", "49660"],
+      "type": "dart"
+    },
+    {
+      "name": "trivyal_flutter (profile mode)",
+      "cwd": "trivyal_flutter",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "trivyal_flutter (release mode)",
+      "cwd": "trivyal_flutter",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release"
+    },
+    {
+      "name": "trivyal_server",
+      "cwd": "trivyal_server",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--mode", "development", "--apply-migrations"]
+    }
+  ]
+}
