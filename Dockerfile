@@ -40,6 +40,7 @@ ENV logging=normal
 ENV role=monolith
 
 COPY --from=dart-runtime /runtime/ /
+COPY --from=build /app/trivyal_server/bin/server server
 COPY --from=build /app/trivyal_server/confi[g]/ config/
 COPY --from=build /app/trivyal_server/we[b]/ web/
 COPY --from=build /app/trivyal_server/migration[s]/ migrations/
