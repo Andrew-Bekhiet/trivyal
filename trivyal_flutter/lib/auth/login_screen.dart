@@ -19,8 +19,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final size = MediaQuery.sizeOf(context);
+    final client = ref.watch(clientProvider);
 
-    var client = ref.watch(clientProvider);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16),
