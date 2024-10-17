@@ -30,6 +30,8 @@ RUN echo $CONFIG_PASSWORDS_YAML | base64 -d > ./config/passwords.yaml
 RUN dart pub get
 RUN dart compile exe bin/main.dart -o bin/server
 
+FROM dart:3.3.0 AS dart-runtime
+
 FROM alpine:latest
 
 ENV runmode=production
@@ -37,7 +39,7 @@ ENV serverid=default
 ENV logging=normal
 ENV role=monolith
 
-COPY --from=build /app/trivyal_server/bin/server server
+COPY --from=dart-runtime /runtime/ /
 COPY --from=build /app/trivyal_server/confi[g]/ config/
 COPY --from=build /app/trivyal_server/we[b]/ web/
 COPY --from=build /app/trivyal_server/migration[s]/ migrations/
