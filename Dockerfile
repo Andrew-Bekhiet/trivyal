@@ -11,7 +11,9 @@ COPY . .
 
 WORKDIR /app/trivyal_flutter/
 
-RUN flutter build web && cp -r ./build/web/* ../trivyal_server/web/static/
+RUN flutter build web 
+RUN mkdir -p ../trivyal_server/web
+RUN cp -r ./build/web/* ../trivyal_server/web/
 
 WORKDIR /app/trivyal_server
 

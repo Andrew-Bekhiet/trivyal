@@ -1,6 +1,5 @@
 import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as auth;
-import 'package:trivyal_server/src/web/routes/root.dart';
 
 import 'src/generated/endpoints.dart';
 import 'src/generated/protocol.dart';
@@ -36,12 +35,9 @@ void run(List<String> args) async {
   // If you are using any future calls, they need to be registered here.
   // pod.registerFutureCall(ExampleFutureCall(), 'exampleFutureCall');
 
-  // Setup a default page at the web root.
-  pod.webServer.addRoute(RouteRoot(), '/');
-  pod.webServer.addRoute(RouteRoot(), '/index.html');
-  // Serve all files in the /static directory.
+  // Serve all files in the /web directory.
   pod.webServer.addRoute(
-    RouteStaticDirectory(serverDirectory: 'static', basePath: '/'),
+    RouteStaticDirectory(serverDirectory: '.', basePath: '/'),
     '/*',
   );
 
