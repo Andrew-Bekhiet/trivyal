@@ -4,10 +4,8 @@ WORKDIR /server
 COPY trivyal_server .
 
 ARG CONFIG_GOOGLE_CLIENT_SECRET
-ARG CONFIG_PASSWORDS_YAML
 
 RUN echo $CONFIG_GOOGLE_CLIENT_SECRET | base64 -d > ./config/google_client_secret.json
-RUN echo $CONFIG_PASSWORDS_YAML | base64 -d > ./config/passwords.yaml
 
 RUN dart pub get
 RUN dart compile exe bin/main.dart -o bin/server
