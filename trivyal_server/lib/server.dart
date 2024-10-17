@@ -37,7 +37,7 @@ void run(List<String> args) async {
 
   // Serve all files in the /web directory.
   pod.webServer.addRoute(
-    RouteStaticDirectory(serverDirectory: '.', basePath: '/'),
+    RouteStaticDirectory(serverDirectory: '.', serveAsRootPath: '/index.html'),
     '/*',
   );
 
