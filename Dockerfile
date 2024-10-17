@@ -24,6 +24,7 @@ ARG UTILS_SECRETS_DART
 
 RUN echo $UTILS_SECRETS_DART | base64 -d > ./lib/utils/secrets.dart
 
+RUN flutter pub get
 RUN flutter build web
 
 FROM alpine:latest
