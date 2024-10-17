@@ -1,25 +1,7 @@
-FROM debian:latest AS build
+FROM dart:stable AS build
 
-RUN apt-get update && apt-get -y install curl git unzip xz-utils zip libglu1-mesa
-
-RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
-
-ENV PATH="/usr/local/flutter/bin:${PATH}"
-
-WORKDIR /app
-COPY . .
-
-WORKDIR /app/trivyal_flutter/
-
-ARG UTILS_SECRETS_DART
-
-RUN echo $UTILS_SECRETS_DART | base64 -d > ./lib/utils/secrets.dart
-
-RUN flutter build web 
-RUN mkdir -p ../trivyal_server/web
-RUN cp -r ./build/web/* ../trivyal_server/web/
-
-WORKDIR /app/trivyal_server
+WORKDIR /server
+COPY trivyal_server .
 
 ARG CONFIG_GOOGLE_CLIENT_SECRET
 ARG CONFIG_PASSWORDS_YAML
@@ -30,7 +12,19 @@ RUN echo $CONFIG_PASSWORDS_YAML | base64 -d > ./config/passwords.yaml
 RUN dart pub get
 RUN dart compile exe bin/main.dart -o bin/server
 
-FROM dart:3.3.0 AS dart-runtime
+WORKDIR /web
+COPY trivyal_flutter/ .
+COPY trivyal_client/ ../trivyal_client/
+
+RUN apt-get update && apt-get -y install curl git unzip xz-utils zip libglu1-mesa
+RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
+ENV PATH="${PATH}:/usr/local/flutter/bin"
+
+ARG UTILS_SECRETS_DART
+
+RUN echo $UTILS_SECRETS_DART | base64 -d > ./lib/utils/secrets.dart
+
+RUN flutter build web
 
 FROM alpine:latest
 
@@ -39,11 +33,13 @@ ENV serverid=default
 ENV logging=normal
 ENV role=monolith
 
-COPY --from=dart-runtime /runtime/ /
-COPY --from=build /app/trivyal_server/bin/server server
-COPY --from=build /app/trivyal_server/confi[g]/ config/
-COPY --from=build /app/trivyal_server/we[b]/ web/
-COPY --from=build /app/trivyal_server/migration[s]/ migrations/
+COPY --from=build /runtime/ /
+COPY --from=build /server/bin/server server
+COPY --from=build /server/confi[g]/ config/
+COPY --from=build /server/we[b]/ web/
+COPY --from=build /server/migration[s]/ migrations/
+
+COPY --from=build /web/build/web/ web/
 
 EXPOSE 8080
 EXPOSE 8081
