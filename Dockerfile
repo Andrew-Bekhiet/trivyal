@@ -11,6 +11,8 @@ COPY . .
 
 WORKDIR /app/trivyal_flutter/
 
+ARG UTILS_SECRETS_DART
+
 RUN echo $UTILS_SECRETS_DART | base64 -d > ./lib/utils/secrets.dart
 
 RUN flutter build web 
@@ -18,6 +20,9 @@ RUN mkdir -p ../trivyal_server/web
 RUN cp -r ./build/web/* ../trivyal_server/web/
 
 WORKDIR /app/trivyal_server
+
+ARG CONFIG_GOOGLE_CLIENT_SECRET
+ARG CONFIG_PASSWORDS_YAML
 
 RUN echo $CONFIG_GOOGLE_CLIENT_SECRET | base64 -d > ./config/google_client_secret.json
 RUN echo $CONFIG_PASSWORDS_YAML | base64 -d > ./config/passwords.yaml
