@@ -37,7 +37,7 @@ ENV serverid=default
 ENV logging=normal
 ENV role=monolith
 
-COPY --from=build /runtime/ /
+COPY --from=build /app/trivyal_server/runtime/ /
 COPY --from=build /app/trivyal_server/bin/server server
 COPY --from=build /app/trivyal_server/confi[g]/ config/
 COPY --from=build /app/trivyal_server/we[b]/ web/
