@@ -16,7 +16,7 @@ typedef InitialDatumFn<TModel> = Future<TModel> Function();
 enum ObjectWriteEvent { created, updated, deleted }
 
 extension RealtimeHelper on Session {
-  Stream<TRes> watchAll<TRes, TModel>({
+  Stream<TRes> watchAll<TRes, TModel extends TableRow>({
     required InitialDataFn<TModel> fetchFromDB,
     required TransformDataFn<TModel> transform,
     required TRes Function(List<TModel> data) toResponse,
@@ -52,10 +52,10 @@ extension RealtimeHelper on Session {
             // Merge the write event with lastResult data
             List<TModel> newData = switch (event.type) {
               ObjectWriteEvent.created => [...latestData, event.data],
-              ObjectWriteEvent.updated => latestData
-                  .map((o) => equality.equals(o, event.data) ? event.data : o),
+              ObjectWriteEvent.updated =>
+                latestData.map((o) => o.id == event.data.id ? event.data : o),
               ObjectWriteEvent.deleted =>
-                latestData.where((o) => !equality.equals(o, event.data)),
+                latestData.where((o) => o.id != event.data.id),
             }
                 .toList();
 

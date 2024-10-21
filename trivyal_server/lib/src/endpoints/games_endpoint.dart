@@ -4,7 +4,7 @@ import 'package:trivyal_server/src/generated/protocol.dart';
 import 'package:trivyal_server/src/realtime/realtime_helper.dart';
 
 class GamesEndpoint extends Endpoint {
-  Stream<List<Game>> watchAll(Session session) async* {
+  Stream<GameListResponse> watchAll(Session session) async* {
     final user = await _assertAuthenticated(session);
 
     yield* session.watchAll(
@@ -17,7 +17,7 @@ class GamesEndpoint extends Endpoint {
       shouldProcessEvent: (_, data) => data.ownerId == user.userId,
       transform: (data) =>
           data.where((g) => g.ownerId == user.userId).sortedBy((g) => g.name),
-      toResponse: (data) => data,
+      toResponse: (data) => GameListResponse(data: data),
     );
   }
 
@@ -49,7 +49,7 @@ class GamesEndpoint extends Endpoint {
     final created =
         await Game.db.insertRow(session, game.copyWith(ownerId: user.userId));
     await session.messages
-        .postMessage('$Game.${ObjectWriteEvent.created}', created);
+        .postMessage('$Game.${ObjectWriteEvent.created.name}', created);
 
     return created;
   }
@@ -71,7 +71,7 @@ class GamesEndpoint extends Endpoint {
 
     final updated = await Game.db.updateRow(session, newGame);
     await session.messages
-        .postMessage('$Game.${ObjectWriteEvent.updated}', updated);
+        .postMessage('$Game.${ObjectWriteEvent.updated.name}', updated);
 
     return updated;
   }
@@ -83,7 +83,7 @@ class GamesEndpoint extends Endpoint {
 
     final deleted = await Game.db.deleteRow(session, game);
     await session.messages
-        .postMessage('$Game.${ObjectWriteEvent.deleted}', deleted);
+        .postMessage('$Game.${ObjectWriteEvent.deleted.name}', deleted);
   }
 
   void _assertUserIsGameOwner(AuthenticationInfo user, Game game) {

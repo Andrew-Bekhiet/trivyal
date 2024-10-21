@@ -11,9 +11,10 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
-import 'package:trivyal_client/src/protocol/game.dart' as _i3;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i4;
-import 'protocol.dart' as _i5;
+import 'package:trivyal_client/src/protocol/game_list_response.dart' as _i3;
+import 'package:trivyal_client/src/protocol/game.dart' as _i4;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i5;
+import 'protocol.dart' as _i6;
 
 /// {@category Endpoint}
 class EndpointGames extends _i1.EndpointRef {
@@ -22,34 +23,35 @@ class EndpointGames extends _i1.EndpointRef {
   @override
   String get name => 'games';
 
-  _i2.Stream<List<_i3.Game>> watchAll() => caller.callStreamingServerEndpoint<
-          _i2.Stream<List<_i3.Game>>, List<_i3.Game>>(
+  _i2.Stream<_i3.GameListResponse> watchAll() =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i3.GameListResponse>,
+          _i3.GameListResponse>(
         'games',
         'watchAll',
         {},
         {},
       );
 
-  _i2.Stream<_i3.Game?> watchSingle(int id) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i3.Game?>, _i3.Game?>(
+  _i2.Stream<_i4.Game?> watchSingle(int id) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i4.Game?>, _i4.Game?>(
         'games',
         'watchSingle',
         {'id': id},
         {},
       );
 
-  _i2.Future<_i3.Game> createGame(_i3.Game game) =>
-      caller.callServerEndpoint<_i3.Game>(
+  _i2.Future<_i4.Game> createGame(_i4.Game game) =>
+      caller.callServerEndpoint<_i4.Game>(
         'games',
         'createGame',
         {'game': game},
       );
 
-  _i2.Future<_i3.Game> updateGame(
+  _i2.Future<_i4.Game> updateGame(
     int id,
-    _i3.Game newGame,
+    _i4.Game newGame,
   ) =>
-      caller.callServerEndpoint<_i3.Game>(
+      caller.callServerEndpoint<_i4.Game>(
         'games',
         'updateGame',
         {
@@ -58,7 +60,7 @@ class EndpointGames extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<void> deleteGame(_i3.Game game) => caller.callServerEndpoint<void>(
+  _i2.Future<void> deleteGame(_i4.Game game) => caller.callServerEndpoint<void>(
         'games',
         'deleteGame',
         {'game': game},
@@ -67,10 +69,10 @@ class EndpointGames extends _i1.EndpointRef {
 
 class _Modules {
   _Modules(Client client) {
-    auth = _i4.Caller(client);
+    auth = _i5.Caller(client);
   }
 
-  late final _i4.Caller auth;
+  late final _i5.Caller auth;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -89,7 +91,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i5.Protocol(),
+          _i6.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
