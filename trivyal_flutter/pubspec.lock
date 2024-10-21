@@ -588,50 +588,50 @@ packages:
     dependency: transitive
     description:
       name: serverpod_auth_client
-      sha256: "02c67678bffcec896eee5d5370740a3cd389e5500da5a0dbc80c34a3d323e56b"
+      sha256: "9dcbd6bf90c941a1893adcdecbfbdfd224d7d45269fc9f2f07a2da361154f1c4"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.5"
   serverpod_auth_google_flutter:
     dependency: "direct main"
     description:
       name: serverpod_auth_google_flutter
-      sha256: daf51f86de9eabcbcc8606a658f59b02f1ccacd4ea816c66dbd720f976965ed7
+      sha256: "044bcf22ac4fcbe1684e93bd3800d451fd703c4564314e04f79e0301a8448968"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.5"
   serverpod_auth_shared_flutter:
     dependency: transitive
     description:
       name: serverpod_auth_shared_flutter
-      sha256: f5b51b1272496264bf500648c975752724657ea637785c8b3afad37eea5c765d
+      sha256: "8278e476ef002265fc84270ef9d6e5a15472a757b3a5d5ae8df6516280bf1d71"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.5"
   serverpod_client:
     dependency: transitive
     description:
       name: serverpod_client
-      sha256: "0db2d7532ac891b85c9531c1b743712770756392e57c61e17742614eaa394eea"
+      sha256: a553d1dd6f2301d4549f41380193404361477b44952894b92a9f205a29456ed8
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.5"
   serverpod_flutter:
     dependency: "direct main"
     description:
       name: serverpod_flutter
-      sha256: "5943e71ee523bc329b4ad979b018682a028b89db933c7db426b6280255e39c5c"
+      sha256: d092162aeae24b318cb0e175a91999e83499890b792362c7948ba547d58c8763
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.5"
   serverpod_serialization:
     dependency: transitive
     description:
       name: serverpod_serialization
-      sha256: b90869587bbad4dc91fb762231790648cd5978d4dca23757a7ae962c0345c879
+      sha256: "54c91f1b8ae14a2402b41f2f019c21b72cc3ac2200be97da703ad83d4ab60bf1"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.5"
   shared_preferences:
     dependency: transitive
     description:
