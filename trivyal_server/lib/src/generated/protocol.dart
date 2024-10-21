@@ -13,9 +13,7 @@ library protocol; // ignore_for_file: no_leading_underscores_for_library_prefixe
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i3;
-import 'example.dart' as _i4;
-import 'user.dart' as _i5;
-export 'example.dart';
+import 'user.dart' as _i4;
 export 'user.dart';
 
 class Protocol extends _i1.SerializationManagerServer {
@@ -80,17 +78,11 @@ class Protocol extends _i1.SerializationManagerServer {
     Type? t,
   ]) {
     t ??= T;
-    if (t == _i4.Example) {
-      return _i4.Example.fromJson(data) as T;
+    if (t == _i4.User) {
+      return _i4.User.fromJson(data) as T;
     }
-    if (t == _i5.User) {
-      return _i5.User.fromJson(data) as T;
-    }
-    if (t == _i1.getType<_i4.Example?>()) {
-      return (data != null ? _i4.Example.fromJson(data) : null) as T;
-    }
-    if (t == _i1.getType<_i5.User?>()) {
-      return (data != null ? _i5.User.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i4.User?>()) {
+      return (data != null ? _i4.User.fromJson(data) : null) as T;
     }
     try {
       return _i3.Protocol().deserialize<T>(data, t);
@@ -105,10 +97,7 @@ class Protocol extends _i1.SerializationManagerServer {
   String? getClassNameForObject(Object? data) {
     String? className = super.getClassNameForObject(data);
     if (className != null) return className;
-    if (data is _i4.Example) {
-      return 'Example';
-    }
-    if (data is _i5.User) {
+    if (data is _i4.User) {
       return 'User';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -124,11 +113,8 @@ class Protocol extends _i1.SerializationManagerServer {
 
   @override
   dynamic deserializeByClassName(Map<String, dynamic> data) {
-    if (data['className'] == 'Example') {
-      return deserialize<_i4.Example>(data['data']);
-    }
     if (data['className'] == 'User') {
-      return deserialize<_i5.User>(data['data']);
+      return deserialize<_i4.User>(data['data']);
     }
     if (data['className'].startsWith('serverpod.')) {
       data['className'] = data['className'].substring(10);
@@ -156,8 +142,8 @@ class Protocol extends _i1.SerializationManagerServer {
       }
     }
     switch (t) {
-      case _i5.User:
-        return _i5.User.t;
+      case _i4.User:
+        return _i4.User.t;
     }
     return null;
   }

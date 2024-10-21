@@ -9,50 +9,35 @@
 // ignore_for_file: use_super_parameters
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import 'dart:async' as _i2;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i3;
-import 'protocol.dart' as _i4;
-
-/// {@category Endpoint}
-class EndpointExample extends _i1.EndpointRef {
-  EndpointExample(_i1.EndpointCaller caller) : super(caller);
-
-  @override
-  String get name => 'example';
-
-  _i2.Future<String> hello(String name) => caller.callServerEndpoint<String>(
-        'example',
-        'hello',
-        {'name': name},
-      );
-}
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i1;
+import 'package:serverpod_client/serverpod_client.dart' as _i2;
+import 'protocol.dart' as _i3;
 
 class _Modules {
   _Modules(Client client) {
-    auth = _i3.Caller(client);
+    auth = _i1.Caller(client);
   }
 
-  late final _i3.Caller auth;
+  late final _i1.Caller auth;
 }
 
-class Client extends _i1.ServerpodClientShared {
+class Client extends _i2.ServerpodClientShared {
   Client(
     String host, {
     dynamic securityContext,
-    _i1.AuthenticationKeyManager? authenticationKeyManager,
+    _i2.AuthenticationKeyManager? authenticationKeyManager,
     Duration? streamingConnectionTimeout,
     Duration? connectionTimeout,
     Function(
-      _i1.MethodCallContext,
+      _i2.MethodCallContext,
       Object,
       StackTrace,
     )? onFailedCall,
-    Function(_i1.MethodCallContext)? onSucceededCall,
+    Function(_i2.MethodCallContext)? onSucceededCall,
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i4.Protocol(),
+          _i3.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -62,18 +47,15 @@ class Client extends _i1.ServerpodClientShared {
           disconnectStreamsOnLostInternetConnection:
               disconnectStreamsOnLostInternetConnection,
         ) {
-    example = EndpointExample(this);
     modules = _Modules(this);
   }
-
-  late final EndpointExample example;
 
   late final _Modules modules;
 
   @override
-  Map<String, _i1.EndpointRef> get endpointRefLookup => {'example': example};
+  Map<String, _i2.EndpointRef> get endpointRefLookup => {};
 
   @override
-  Map<String, _i1.ModuleEndpointCaller> get moduleLookup =>
+  Map<String, _i2.ModuleEndpointCaller> get moduleLookup =>
       {'auth': modules.auth};
 }
