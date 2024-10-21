@@ -9,35 +9,87 @@
 // ignore_for_file: use_super_parameters
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i1;
-import 'package:serverpod_client/serverpod_client.dart' as _i2;
-import 'protocol.dart' as _i3;
+import 'package:serverpod_client/serverpod_client.dart' as _i1;
+import 'dart:async' as _i2;
+import 'package:trivyal_client/src/protocol/game.dart' as _i3;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i4;
+import 'protocol.dart' as _i5;
+
+/// {@category Endpoint}
+class EndpointGames extends _i1.EndpointRef {
+  EndpointGames(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'games';
+
+  _i2.Stream<List<_i3.Game>> watchAll() => caller.callStreamingServerEndpoint<
+          _i2.Stream<List<_i3.Game>>, List<_i3.Game>>(
+        'games',
+        'watchAll',
+        {},
+        {},
+      );
+
+  _i2.Stream<_i3.Game?> watchSingle(int id) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i3.Game?>, _i3.Game?>(
+        'games',
+        'watchSingle',
+        {'id': id},
+        {},
+      );
+
+  _i2.Future<_i3.Game> createGame(_i3.Game game) =>
+      caller.callServerEndpoint<_i3.Game>(
+        'games',
+        'createGame',
+        {'game': game},
+      );
+
+  _i2.Future<_i3.Game> updateGame(
+    int id,
+    _i3.Game newGame,
+  ) =>
+      caller.callServerEndpoint<_i3.Game>(
+        'games',
+        'updateGame',
+        {
+          'id': id,
+          'newGame': newGame,
+        },
+      );
+
+  _i2.Future<void> deleteGame(_i3.Game game) => caller.callServerEndpoint<void>(
+        'games',
+        'deleteGame',
+        {'game': game},
+      );
+}
 
 class _Modules {
   _Modules(Client client) {
-    auth = _i1.Caller(client);
+    auth = _i4.Caller(client);
   }
 
-  late final _i1.Caller auth;
+  late final _i4.Caller auth;
 }
 
-class Client extends _i2.ServerpodClientShared {
+class Client extends _i1.ServerpodClientShared {
   Client(
     String host, {
     dynamic securityContext,
-    _i2.AuthenticationKeyManager? authenticationKeyManager,
+    _i1.AuthenticationKeyManager? authenticationKeyManager,
     Duration? streamingConnectionTimeout,
     Duration? connectionTimeout,
     Function(
-      _i2.MethodCallContext,
+      _i1.MethodCallContext,
       Object,
       StackTrace,
     )? onFailedCall,
-    Function(_i2.MethodCallContext)? onSucceededCall,
+    Function(_i1.MethodCallContext)? onSucceededCall,
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i3.Protocol(),
+          _i5.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -47,15 +99,18 @@ class Client extends _i2.ServerpodClientShared {
           disconnectStreamsOnLostInternetConnection:
               disconnectStreamsOnLostInternetConnection,
         ) {
+    games = EndpointGames(this);
     modules = _Modules(this);
   }
+
+  late final EndpointGames games;
 
   late final _Modules modules;
 
   @override
-  Map<String, _i2.EndpointRef> get endpointRefLookup => {};
+  Map<String, _i1.EndpointRef> get endpointRefLookup => {'games': games};
 
   @override
-  Map<String, _i2.ModuleEndpointCaller> get moduleLookup =>
+  Map<String, _i1.ModuleEndpointCaller> get moduleLookup =>
       {'auth': modules.auth};
 }

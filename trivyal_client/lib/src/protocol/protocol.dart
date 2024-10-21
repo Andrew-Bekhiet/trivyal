@@ -16,7 +16,8 @@ import 'game.dart' as _i3;
 import 'question.dart' as _i4;
 import 'user.dart' as _i5;
 import 'protocol.dart' as _i6;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i7;
+import 'package:trivyal_client/src/protocol/game.dart' as _i7;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i8;
 export 'choice.dart';
 export 'game.dart';
 export 'question.dart';
@@ -74,8 +75,12 @@ class Protocol extends _i1.SerializationManager {
           ? (data as List).map((e) => deserialize<_i6.Game>(e)).toList()
           : null) as dynamic;
     }
+    if (t == List<_i7.Game>) {
+      return (data as List).map((e) => deserialize<_i7.Game>(e)).toList()
+          as dynamic;
+    }
     try {
-      return _i7.Protocol().deserialize<T>(data, t);
+      return _i8.Protocol().deserialize<T>(data, t);
     } on _i1.DeserializationTypeNotFoundException catch (_) {}
     return super.deserialize<T>(data, t);
   }
@@ -96,7 +101,7 @@ class Protocol extends _i1.SerializationManager {
     if (data is _i5.User) {
       return 'User';
     }
-    className = _i7.Protocol().getClassNameForObject(data);
+    className = _i8.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod_auth.$className';
     }
@@ -119,7 +124,7 @@ class Protocol extends _i1.SerializationManager {
     }
     if (data['className'].startsWith('serverpod_auth.')) {
       data['className'] = data['className'].substring(15);
-      return _i7.Protocol().deserializeByClassName(data);
+      return _i8.Protocol().deserializeByClassName(data);
     }
     return super.deserializeByClassName(data);
   }

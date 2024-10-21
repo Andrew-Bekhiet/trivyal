@@ -18,6 +18,7 @@ import 'game.dart' as _i5;
 import 'question.dart' as _i6;
 import 'user.dart' as _i7;
 import 'protocol.dart' as _i8;
+import 'package:trivyal_server/src/generated/game.dart' as _i9;
 export 'choice.dart';
 export 'game.dart';
 export 'question.dart';
@@ -250,6 +251,10 @@ class Protocol extends _i1.SerializationManagerServer {
       return (data != null
           ? (data as List).map((e) => deserialize<_i8.Game>(e)).toList()
           : null) as dynamic;
+    }
+    if (t == List<_i9.Game>) {
+      return (data as List).map((e) => deserialize<_i9.Game>(e)).toList()
+          as dynamic;
     }
     try {
       return _i3.Protocol().deserialize<T>(data, t);

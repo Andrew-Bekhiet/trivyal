@@ -1,0 +1,6 @@
+games:
+  - watchAll:
+  - watchSingle:
+  - createGame:
+  - updateGame:
+  - deleteGame:
