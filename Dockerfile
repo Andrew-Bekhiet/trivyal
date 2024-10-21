@@ -3,10 +3,6 @@ FROM dart:stable AS build
 WORKDIR /server
 COPY trivyal_server .
 
-ARG CONFIG_GOOGLE_CLIENT_SECRET
-
-RUN echo $CONFIG_GOOGLE_CLIENT_SECRET | base64 -d > ./config/google_client_secret.json
-
 RUN dart pub get
 RUN dart compile exe bin/main.dart -o bin/server
 
@@ -43,5 +39,8 @@ COPY --from=build /web/build/web/ web/
 EXPOSE 8080
 EXPOSE 8081
 EXPOSE 8082
+
+ARG CONFIG_GOOGLE_CLIENT_SECRET
+RUN echo $CONFIG_GOOGLE_CLIENT_SECRET | base64 -d > ./config/google_client_secret.json
 
 ENTRYPOINT ./server --mode=$runmode --server-id=$serverid --logging=$logging --role=$role
