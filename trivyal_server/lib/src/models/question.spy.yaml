@@ -1,0 +1,8 @@
+class: Question
+table: questions
+fields:
+  game: Game?, relation(name=game_questions, onDelete=cascade)
+  text: String
+  choices: List<Choice>
+  correctChoice: Choice
+  timeInSeconds: int

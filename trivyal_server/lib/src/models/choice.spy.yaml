@@ -1,0 +1,4 @@
+class: Choice
+fields:
+  text: String
+  color: int

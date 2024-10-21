@@ -10,18 +10,21 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
+import 'protocol.dart' as _i2;
 
 abstract class User implements _i1.SerializableModel {
   User._({
     this.id,
     required this.userId,
     required this.name,
+    this.games,
   });
 
   factory User({
     int? id,
     required int userId,
     required String name,
+    List<_i2.Game>? games,
   }) = _UserImpl;
 
   factory User.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -29,6 +32,9 @@ abstract class User implements _i1.SerializableModel {
       id: jsonSerialization['id'] as int?,
       userId: jsonSerialization['userId'] as int,
       name: jsonSerialization['name'] as String,
+      games: (jsonSerialization['games'] as List?)
+          ?.map((e) => _i2.Game.fromJson((e as Map<String, dynamic>)))
+          .toList(),
     );
   }
 
@@ -41,10 +47,13 @@ abstract class User implements _i1.SerializableModel {
 
   String name;
 
+  List<_i2.Game>? games;
+
   User copyWith({
     int? id,
     int? userId,
     String? name,
+    List<_i2.Game>? games,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -52,6 +61,7 @@ abstract class User implements _i1.SerializableModel {
       if (id != null) 'id': id,
       'userId': userId,
       'name': name,
+      if (games != null) 'games': games?.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -68,10 +78,12 @@ class _UserImpl extends User {
     int? id,
     required int userId,
     required String name,
+    List<_i2.Game>? games,
   }) : super._(
           id: id,
           userId: userId,
           name: name,
+          games: games,
         );
 
   @override
@@ -79,11 +91,15 @@ class _UserImpl extends User {
     Object? id = _Undefined,
     int? userId,
     String? name,
+    Object? games = _Undefined,
   }) {
     return User(
       id: id is int? ? id : this.id,
       userId: userId ?? this.userId,
       name: name ?? this.name,
+      games: games is List<_i2.Game>?
+          ? games
+          : this.games?.map((e0) => e0.copyWith()).toList(),
     );
   }
 }

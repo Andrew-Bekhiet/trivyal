@@ -3,3 +3,4 @@ table: users
 fields:
   userId: int
   name: String
+  games: List<Game>?, relation(name=user_games)
