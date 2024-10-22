@@ -18,20 +18,18 @@ abstract class Question implements _i1.TableRow, _i1.ProtocolSerialization {
   Question._({
     this.id,
     required this.gameId,
-    this.game,
     required this.text,
     required this.choices,
-    required this.correctChoice,
+    required this.correctChoiceId,
     required this.timeInSeconds,
   });
 
   factory Question({
     int? id,
     required int gameId,
-    _i2.Game? game,
     required String text,
     required List<_i2.Choice> choices,
-    required _i2.Choice correctChoice,
+    required int correctChoiceId,
     required int timeInSeconds,
   }) = _QuestionImpl;
 
@@ -39,16 +37,11 @@ abstract class Question implements _i1.TableRow, _i1.ProtocolSerialization {
     return Question(
       id: jsonSerialization['id'] as int?,
       gameId: jsonSerialization['gameId'] as int,
-      game: jsonSerialization['game'] == null
-          ? null
-          : _i2.Game.fromJson(
-              (jsonSerialization['game'] as Map<String, dynamic>)),
       text: jsonSerialization['text'] as String,
       choices: (jsonSerialization['choices'] as List)
           .map((e) => _i2.Choice.fromJson((e as Map<String, dynamic>)))
           .toList(),
-      correctChoice: _i2.Choice.fromJson(
-          (jsonSerialization['correctChoice'] as Map<String, dynamic>)),
+      correctChoiceId: jsonSerialization['correctChoiceId'] as int,
       timeInSeconds: jsonSerialization['timeInSeconds'] as int,
     );
   }
@@ -62,15 +55,15 @@ abstract class Question implements _i1.TableRow, _i1.ProtocolSerialization {
 
   int gameId;
 
-  _i2.Game? game;
-
   String text;
 
   List<_i2.Choice> choices;
 
-  _i2.Choice correctChoice;
+  int correctChoiceId;
 
   int timeInSeconds;
+
+  int? _gamesQuestionsGamesId;
 
   @override
   _i1.Table get table => t;
@@ -78,10 +71,9 @@ abstract class Question implements _i1.TableRow, _i1.ProtocolSerialization {
   Question copyWith({
     int? id,
     int? gameId,
-    _i2.Game? game,
     String? text,
     List<_i2.Choice>? choices,
-    _i2.Choice? correctChoice,
+    int? correctChoiceId,
     int? timeInSeconds,
   });
   @override
@@ -89,11 +81,12 @@ abstract class Question implements _i1.TableRow, _i1.ProtocolSerialization {
     return {
       if (id != null) 'id': id,
       'gameId': gameId,
-      if (game != null) 'game': game?.toJson(),
       'text': text,
       'choices': choices.toJson(valueToJson: (v) => v.toJson()),
-      'correctChoice': correctChoice.toJson(),
+      'correctChoiceId': correctChoiceId,
       'timeInSeconds': timeInSeconds,
+      if (_gamesQuestionsGamesId != null)
+        '_gamesQuestionsGamesId': _gamesQuestionsGamesId,
     };
   }
 
@@ -102,16 +95,15 @@ abstract class Question implements _i1.TableRow, _i1.ProtocolSerialization {
     return {
       if (id != null) 'id': id,
       'gameId': gameId,
-      if (game != null) 'game': game?.toJsonForProtocol(),
       'text': text,
       'choices': choices.toJson(valueToJson: (v) => v.toJsonForProtocol()),
-      'correctChoice': correctChoice.toJsonForProtocol(),
+      'correctChoiceId': correctChoiceId,
       'timeInSeconds': timeInSeconds,
     };
   }
 
-  static QuestionInclude include({_i2.GameInclude? game}) {
-    return QuestionInclude._(game: game);
+  static QuestionInclude include() {
+    return QuestionInclude._();
   }
 
   static QuestionIncludeList includeList({
@@ -146,18 +138,16 @@ class _QuestionImpl extends Question {
   _QuestionImpl({
     int? id,
     required int gameId,
-    _i2.Game? game,
     required String text,
     required List<_i2.Choice> choices,
-    required _i2.Choice correctChoice,
+    required int correctChoiceId,
     required int timeInSeconds,
   }) : super._(
           id: id,
           gameId: gameId,
-          game: game,
           text: text,
           choices: choices,
-          correctChoice: correctChoice,
+          correctChoiceId: correctChoiceId,
           timeInSeconds: timeInSeconds,
         );
 
@@ -165,21 +155,62 @@ class _QuestionImpl extends Question {
   Question copyWith({
     Object? id = _Undefined,
     int? gameId,
-    Object? game = _Undefined,
     String? text,
     List<_i2.Choice>? choices,
-    _i2.Choice? correctChoice,
+    int? correctChoiceId,
     int? timeInSeconds,
   }) {
     return Question(
       id: id is int? ? id : this.id,
       gameId: gameId ?? this.gameId,
-      game: game is _i2.Game? ? game : this.game?.copyWith(),
       text: text ?? this.text,
       choices: choices ?? this.choices.map((e0) => e0.copyWith()).toList(),
-      correctChoice: correctChoice ?? this.correctChoice.copyWith(),
+      correctChoiceId: correctChoiceId ?? this.correctChoiceId,
       timeInSeconds: timeInSeconds ?? this.timeInSeconds,
     );
+  }
+}
+
+class QuestionImplicit extends _QuestionImpl {
+  QuestionImplicit._({
+    int? id,
+    required int gameId,
+    required String text,
+    required List<_i2.Choice> choices,
+    required int correctChoiceId,
+    required int timeInSeconds,
+    this.$_gamesQuestionsGamesId,
+  }) : super(
+          id: id,
+          gameId: gameId,
+          text: text,
+          choices: choices,
+          correctChoiceId: correctChoiceId,
+          timeInSeconds: timeInSeconds,
+        );
+
+  factory QuestionImplicit(
+    Question question, {
+    int? $_gamesQuestionsGamesId,
+  }) {
+    return QuestionImplicit._(
+      id: question.id,
+      gameId: question.gameId,
+      text: question.text,
+      choices: question.choices,
+      correctChoiceId: question.correctChoiceId,
+      timeInSeconds: question.timeInSeconds,
+      $_gamesQuestionsGamesId: $_gamesQuestionsGamesId,
+    );
+  }
+
+  int? $_gamesQuestionsGamesId;
+
+  @override
+  Map<String, dynamic> toJson() {
+    var jsonMap = super.toJson();
+    jsonMap.addAll({'_gamesQuestionsGamesId': $_gamesQuestionsGamesId});
+    return jsonMap;
   }
 }
 
@@ -197,40 +228,31 @@ class QuestionTable extends _i1.Table {
       'choices',
       this,
     );
-    correctChoice = _i1.ColumnSerializable(
-      'correctChoice',
+    correctChoiceId = _i1.ColumnInt(
+      'correctChoiceId',
       this,
     );
     timeInSeconds = _i1.ColumnInt(
       'timeInSeconds',
       this,
     );
+    $_gamesQuestionsGamesId = _i1.ColumnInt(
+      '_gamesQuestionsGamesId',
+      this,
+    );
   }
 
   late final _i1.ColumnInt gameId;
-
-  _i2.GameTable? _game;
 
   late final _i1.ColumnString text;
 
   late final _i1.ColumnSerializable choices;
 
-  late final _i1.ColumnSerializable correctChoice;
+  late final _i1.ColumnInt correctChoiceId;
 
   late final _i1.ColumnInt timeInSeconds;
 
-  _i2.GameTable get game {
-    if (_game != null) return _game!;
-    _game = _i1.createRelationTable(
-      relationFieldName: 'game',
-      field: Question.t.gameId,
-      foreignField: _i2.Game.t.id,
-      tableRelation: tableRelation,
-      createTable: (foreignTableRelation) =>
-          _i2.GameTable(tableRelation: foreignTableRelation),
-    );
-    return _game!;
-  }
+  late final _i1.ColumnInt $_gamesQuestionsGamesId;
 
   @override
   List<_i1.Column> get columns => [
@@ -238,28 +260,17 @@ class QuestionTable extends _i1.Table {
         gameId,
         text,
         choices,
-        correctChoice,
+        correctChoiceId,
         timeInSeconds,
+        $_gamesQuestionsGamesId,
       ];
-
-  @override
-  _i1.Table? getRelationTable(String relationField) {
-    if (relationField == 'game') {
-      return game;
-    }
-    return null;
-  }
 }
 
 class QuestionInclude extends _i1.IncludeObject {
-  QuestionInclude._({_i2.GameInclude? game}) {
-    _game = game;
-  }
-
-  _i2.GameInclude? _game;
+  QuestionInclude._();
 
   @override
-  Map<String, _i1.Include?> get includes => {'game': _game};
+  Map<String, _i1.Include?> get includes => {};
 
   @override
   _i1.Table get table => Question.t;
@@ -288,8 +299,6 @@ class QuestionIncludeList extends _i1.IncludeList {
 class QuestionRepository {
   const QuestionRepository._();
 
-  final attachRow = const QuestionAttachRowRepository._();
-
   Future<List<Question>> find(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<QuestionTable>? where,
@@ -299,7 +308,6 @@ class QuestionRepository {
     bool orderDescending = false,
     _i1.OrderByListBuilder<QuestionTable>? orderByList,
     _i1.Transaction? transaction,
-    QuestionInclude? include,
   }) async {
     return session.db.find<Question>(
       where: where?.call(Question.t),
@@ -309,7 +317,6 @@ class QuestionRepository {
       limit: limit,
       offset: offset,
       transaction: transaction ?? session.transaction,
-      include: include,
     );
   }
 
@@ -321,7 +328,6 @@ class QuestionRepository {
     bool orderDescending = false,
     _i1.OrderByListBuilder<QuestionTable>? orderByList,
     _i1.Transaction? transaction,
-    QuestionInclude? include,
   }) async {
     return session.db.findFirstRow<Question>(
       where: where?.call(Question.t),
@@ -330,7 +336,6 @@ class QuestionRepository {
       orderDescending: orderDescending,
       offset: offset,
       transaction: transaction ?? session.transaction,
-      include: include,
     );
   }
 
@@ -338,12 +343,10 @@ class QuestionRepository {
     _i1.Session session,
     int id, {
     _i1.Transaction? transaction,
-    QuestionInclude? include,
   }) async {
     return session.db.findById<Question>(
       id,
       transaction: transaction ?? session.transaction,
-      include: include,
     );
   }
 
@@ -437,31 +440,6 @@ class QuestionRepository {
     return session.db.count<Question>(
       where: where?.call(Question.t),
       limit: limit,
-      transaction: transaction ?? session.transaction,
-    );
-  }
-}
-
-class QuestionAttachRowRepository {
-  const QuestionAttachRowRepository._();
-
-  Future<void> game(
-    _i1.Session session,
-    Question question,
-    _i2.Game game, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (question.id == null) {
-      throw ArgumentError.notNull('question.id');
-    }
-    if (game.id == null) {
-      throw ArgumentError.notNull('game.id');
-    }
-
-    var $question = question.copyWith(gameId: game.id);
-    await session.db.updateRow<Question>(
-      $question,
-      columns: [Question.t.gameId],
       transaction: transaction ?? session.transaction,
     );
   }

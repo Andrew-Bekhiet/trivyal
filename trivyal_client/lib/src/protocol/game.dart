@@ -10,7 +10,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import 'protocol.dart' as _i2;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i2;
+import 'protocol.dart' as _i3;
 
 abstract class Game implements _i1.SerializableModel {
   Game._({
@@ -25,8 +26,8 @@ abstract class Game implements _i1.SerializableModel {
     int? id,
     required String name,
     required int ownerId,
-    _i2.User? owner,
-    List<_i2.Question>? questions,
+    _i2.UserInfo? owner,
+    List<_i3.Question>? questions,
   }) = _GameImpl;
 
   factory Game.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -36,10 +37,10 @@ abstract class Game implements _i1.SerializableModel {
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i2.User.fromJson(
+          : _i2.UserInfo.fromJson(
               (jsonSerialization['owner'] as Map<String, dynamic>)),
       questions: (jsonSerialization['questions'] as List?)
-          ?.map((e) => _i2.Question.fromJson((e as Map<String, dynamic>)))
+          ?.map((e) => _i3.Question.fromJson((e as Map<String, dynamic>)))
           .toList(),
     );
   }
@@ -53,16 +54,16 @@ abstract class Game implements _i1.SerializableModel {
 
   int ownerId;
 
-  _i2.User? owner;
+  _i2.UserInfo? owner;
 
-  List<_i2.Question>? questions;
+  List<_i3.Question>? questions;
 
   Game copyWith({
     int? id,
     String? name,
     int? ownerId,
-    _i2.User? owner,
-    List<_i2.Question>? questions,
+    _i2.UserInfo? owner,
+    List<_i3.Question>? questions,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -89,8 +90,8 @@ class _GameImpl extends Game {
     int? id,
     required String name,
     required int ownerId,
-    _i2.User? owner,
-    List<_i2.Question>? questions,
+    _i2.UserInfo? owner,
+    List<_i3.Question>? questions,
   }) : super._(
           id: id,
           name: name,
@@ -111,8 +112,8 @@ class _GameImpl extends Game {
       id: id is int? ? id : this.id,
       name: name ?? this.name,
       ownerId: ownerId ?? this.ownerId,
-      owner: owner is _i2.User? ? owner : this.owner?.copyWith(),
-      questions: questions is List<_i2.Question>?
+      owner: owner is _i2.UserInfo? ? owner : this.owner?.copyWith(),
+      questions: questions is List<_i3.Question>?
           ? questions
           : this.questions?.map((e0) => e0.copyWith()).toList(),
     );

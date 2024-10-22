@@ -12,7 +12,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import 'protocol.dart' as _i2;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i2;
+import 'protocol.dart' as _i3;
 
 abstract class Game implements _i1.TableRow, _i1.ProtocolSerialization {
   Game._({
@@ -27,8 +28,8 @@ abstract class Game implements _i1.TableRow, _i1.ProtocolSerialization {
     int? id,
     required String name,
     required int ownerId,
-    _i2.User? owner,
-    List<_i2.Question>? questions,
+    _i2.UserInfo? owner,
+    List<_i3.Question>? questions,
   }) = _GameImpl;
 
   factory Game.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -38,10 +39,10 @@ abstract class Game implements _i1.TableRow, _i1.ProtocolSerialization {
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i2.User.fromJson(
+          : _i2.UserInfo.fromJson(
               (jsonSerialization['owner'] as Map<String, dynamic>)),
       questions: (jsonSerialization['questions'] as List?)
-          ?.map((e) => _i2.Question.fromJson((e as Map<String, dynamic>)))
+          ?.map((e) => _i3.Question.fromJson((e as Map<String, dynamic>)))
           .toList(),
     );
   }
@@ -57,9 +58,9 @@ abstract class Game implements _i1.TableRow, _i1.ProtocolSerialization {
 
   int ownerId;
 
-  _i2.User? owner;
+  _i2.UserInfo? owner;
 
-  List<_i2.Question>? questions;
+  List<_i3.Question>? questions;
 
   @override
   _i1.Table get table => t;
@@ -68,8 +69,8 @@ abstract class Game implements _i1.TableRow, _i1.ProtocolSerialization {
     int? id,
     String? name,
     int? ownerId,
-    _i2.User? owner,
-    List<_i2.Question>? questions,
+    _i2.UserInfo? owner,
+    List<_i3.Question>? questions,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -97,8 +98,8 @@ abstract class Game implements _i1.TableRow, _i1.ProtocolSerialization {
   }
 
   static GameInclude include({
-    _i2.UserInclude? owner,
-    _i2.QuestionIncludeList? questions,
+    _i2.UserInfoInclude? owner,
+    _i3.QuestionIncludeList? questions,
   }) {
     return GameInclude._(
       owner: owner,
@@ -139,8 +140,8 @@ class _GameImpl extends Game {
     int? id,
     required String name,
     required int ownerId,
-    _i2.User? owner,
-    List<_i2.Question>? questions,
+    _i2.UserInfo? owner,
+    List<_i3.Question>? questions,
   }) : super._(
           id: id,
           name: name,
@@ -161,8 +162,8 @@ class _GameImpl extends Game {
       id: id is int? ? id : this.id,
       name: name ?? this.name,
       ownerId: ownerId ?? this.ownerId,
-      owner: owner is _i2.User? ? owner : this.owner?.copyWith(),
-      questions: questions is List<_i2.Question>?
+      owner: owner is _i2.UserInfo? ? owner : this.owner?.copyWith(),
+      questions: questions is List<_i3.Question>?
           ? questions
           : this.questions?.map((e0) => e0.copyWith()).toList(),
     );
@@ -185,51 +186,51 @@ class GameTable extends _i1.Table {
 
   late final _i1.ColumnInt ownerId;
 
-  _i2.UserTable? _owner;
+  _i2.UserInfoTable? _owner;
 
-  _i2.QuestionTable? ___questions;
+  _i3.QuestionTable? ___questions;
 
-  _i1.ManyRelation<_i2.QuestionTable>? _questions;
+  _i1.ManyRelation<_i3.QuestionTable>? _questions;
 
-  _i2.UserTable get owner {
+  _i2.UserInfoTable get owner {
     if (_owner != null) return _owner!;
     _owner = _i1.createRelationTable(
       relationFieldName: 'owner',
       field: Game.t.ownerId,
-      foreignField: _i2.User.t.id,
+      foreignField: _i2.UserInfo.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i2.UserTable(tableRelation: foreignTableRelation),
+          _i2.UserInfoTable(tableRelation: foreignTableRelation),
     );
     return _owner!;
   }
 
-  _i2.QuestionTable get __questions {
+  _i3.QuestionTable get __questions {
     if (___questions != null) return ___questions!;
     ___questions = _i1.createRelationTable(
       relationFieldName: '__questions',
       field: Game.t.id,
-      foreignField: _i2.Question.t.gameId,
+      foreignField: _i3.Question.t.$_gamesQuestionsGamesId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i2.QuestionTable(tableRelation: foreignTableRelation),
+          _i3.QuestionTable(tableRelation: foreignTableRelation),
     );
     return ___questions!;
   }
 
-  _i1.ManyRelation<_i2.QuestionTable> get questions {
+  _i1.ManyRelation<_i3.QuestionTable> get questions {
     if (_questions != null) return _questions!;
     var relationTable = _i1.createRelationTable(
       relationFieldName: 'questions',
       field: Game.t.id,
-      foreignField: _i2.Question.t.gameId,
+      foreignField: _i3.Question.t.$_gamesQuestionsGamesId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i2.QuestionTable(tableRelation: foreignTableRelation),
+          _i3.QuestionTable(tableRelation: foreignTableRelation),
     );
-    _questions = _i1.ManyRelation<_i2.QuestionTable>(
+    _questions = _i1.ManyRelation<_i3.QuestionTable>(
       tableWithRelations: relationTable,
-      table: _i2.QuestionTable(
+      table: _i3.QuestionTable(
           tableRelation: relationTable.tableRelation!.lastRelation),
     );
     return _questions!;
@@ -256,16 +257,16 @@ class GameTable extends _i1.Table {
 
 class GameInclude extends _i1.IncludeObject {
   GameInclude._({
-    _i2.UserInclude? owner,
-    _i2.QuestionIncludeList? questions,
+    _i2.UserInfoInclude? owner,
+    _i3.QuestionIncludeList? questions,
   }) {
     _owner = owner;
     _questions = questions;
   }
 
-  _i2.UserInclude? _owner;
+  _i2.UserInfoInclude? _owner;
 
-  _i2.QuestionIncludeList? _questions;
+  _i3.QuestionIncludeList? _questions;
 
   @override
   Map<String, _i1.Include?> get includes => {
@@ -466,7 +467,7 @@ class GameAttachRepository {
   Future<void> questions(
     _i1.Session session,
     Game game,
-    List<_i2.Question> question, {
+    List<_i3.Question> question, {
     _i1.Transaction? transaction,
   }) async {
     if (question.any((e) => e.id == null)) {
@@ -476,10 +477,15 @@ class GameAttachRepository {
       throw ArgumentError.notNull('game.id');
     }
 
-    var $question = question.map((e) => e.copyWith(gameId: game.id)).toList();
-    await session.db.update<_i2.Question>(
+    var $question = question
+        .map((e) => _i3.QuestionImplicit(
+              e,
+              $_gamesQuestionsGamesId: game.id,
+            ))
+        .toList();
+    await session.db.update<_i3.Question>(
       $question,
-      columns: [_i2.Question.t.gameId],
+      columns: [_i3.Question.t.$_gamesQuestionsGamesId],
       transaction: transaction ?? session.transaction,
     );
   }
@@ -491,7 +497,7 @@ class GameAttachRowRepository {
   Future<void> owner(
     _i1.Session session,
     Game game,
-    _i2.User owner, {
+    _i2.UserInfo owner, {
     _i1.Transaction? transaction,
   }) async {
     if (game.id == null) {
@@ -512,7 +518,7 @@ class GameAttachRowRepository {
   Future<void> questions(
     _i1.Session session,
     Game game,
-    _i2.Question question, {
+    _i3.Question question, {
     _i1.Transaction? transaction,
   }) async {
     if (question.id == null) {
@@ -522,10 +528,13 @@ class GameAttachRowRepository {
       throw ArgumentError.notNull('game.id');
     }
 
-    var $question = question.copyWith(gameId: game.id);
-    await session.db.updateRow<_i2.Question>(
+    var $question = _i3.QuestionImplicit(
+      question,
+      $_gamesQuestionsGamesId: game.id,
+    );
+    await session.db.updateRow<_i3.Question>(
       $question,
-      columns: [_i2.Question.t.gameId],
+      columns: [_i3.Question.t.$_gamesQuestionsGamesId],
       transaction: transaction ?? session.transaction,
     );
   }
@@ -536,17 +545,22 @@ class GameDetachRepository {
 
   Future<void> questions(
     _i1.Session session,
-    List<_i2.Question> question, {
+    List<_i3.Question> question, {
     _i1.Transaction? transaction,
   }) async {
     if (question.any((e) => e.id == null)) {
       throw ArgumentError.notNull('question.id');
     }
 
-    var $question = question.map((e) => e.copyWith(gameId: null)).toList();
-    await session.db.update<_i2.Question>(
+    var $question = question
+        .map((e) => _i3.QuestionImplicit(
+              e,
+              $_gamesQuestionsGamesId: null,
+            ))
+        .toList();
+    await session.db.update<_i3.Question>(
       $question,
-      columns: [_i2.Question.t.gameId],
+      columns: [_i3.Question.t.$_gamesQuestionsGamesId],
       transaction: transaction ?? session.transaction,
     );
   }
@@ -557,17 +571,20 @@ class GameDetachRowRepository {
 
   Future<void> questions(
     _i1.Session session,
-    _i2.Question question, {
+    _i3.Question question, {
     _i1.Transaction? transaction,
   }) async {
     if (question.id == null) {
       throw ArgumentError.notNull('question.id');
     }
 
-    var $question = question.copyWith(gameId: null);
-    await session.db.updateRow<_i2.Question>(
+    var $question = _i3.QuestionImplicit(
+      question,
+      $_gamesQuestionsGamesId: null,
+    );
+    await session.db.updateRow<_i3.Question>(
       $question,
-      columns: [_i2.Question.t.gameId],
+      columns: [_i3.Question.t.$_gamesQuestionsGamesId],
       transaction: transaction ?? session.transaction,
     );
   }

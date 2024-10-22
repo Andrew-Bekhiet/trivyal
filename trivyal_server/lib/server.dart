@@ -18,19 +18,6 @@ void run(List<String> args) async {
   );
 
   pod.webServer.addRoute(auth.RouteGoogleSignIn(), '/googleSignIn');
-  auth.AuthConfig.set(
-    auth.AuthConfig(
-      onUserCreated: (session, userInfo) async {
-        await User.db.insertRow(
-          session,
-          User(
-            userId: userInfo.id!,
-            name: userInfo.fullName ?? userInfo.userName ?? userInfo.email!,
-          ),
-        );
-      },
-    ),
-  );
 
   // If you are using any future calls, they need to be registered here.
   // pod.registerFutureCall(ExampleFutureCall(), 'exampleFutureCall');

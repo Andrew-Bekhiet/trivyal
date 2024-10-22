@@ -17,13 +17,11 @@ import 'choice.dart' as _i4;
 import 'game.dart' as _i5;
 import 'game_list_response.dart' as _i6;
 import 'question.dart' as _i7;
-import 'user.dart' as _i8;
-import 'protocol.dart' as _i9;
+import 'protocol.dart' as _i8;
 export 'choice.dart';
 export 'game.dart';
 export 'game_list_response.dart';
 export 'question.dart';
-export 'user.dart';
 
 class Protocol extends _i1.SerializationManagerServer {
   Protocol._();
@@ -63,7 +61,7 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ForeignKeyDefinition(
           constraintName: 'games_fk_0',
           columns: ['ownerId'],
-          referenceTable: 'users',
+          referenceTable: 'serverpod_user_info',
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
@@ -120,16 +118,22 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'List<protocol:Choice>',
         ),
         _i2.ColumnDefinition(
-          name: 'correctChoice',
-          columnType: _i2.ColumnType.json,
+          name: 'correctChoiceId',
+          columnType: _i2.ColumnType.bigint,
           isNullable: false,
-          dartType: 'protocol:Choice',
+          dartType: 'int',
         ),
         _i2.ColumnDefinition(
           name: 'timeInSeconds',
           columnType: _i2.ColumnType.bigint,
           isNullable: false,
           dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: '_gamesQuestionsGamesId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
         ),
       ],
       foreignKeys: [
@@ -142,55 +146,21 @@ class Protocol extends _i1.SerializationManagerServer {
           onUpdate: _i2.ForeignKeyAction.noAction,
           onDelete: _i2.ForeignKeyAction.cascade,
           matchType: null,
-        )
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'questions_fk_1',
+          columns: ['_gamesQuestionsGamesId'],
+          referenceTable: 'games',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
       ],
       indexes: [
         _i2.IndexDefinition(
           indexName: 'questions_pkey',
-          tableSpace: null,
-          elements: [
-            _i2.IndexElementDefinition(
-              type: _i2.IndexElementDefinitionType.column,
-              definition: 'id',
-            )
-          ],
-          type: 'btree',
-          isUnique: true,
-          isPrimary: true,
-        )
-      ],
-      managed: true,
-    ),
-    _i2.TableDefinition(
-      name: 'users',
-      dartName: 'User',
-      schema: 'public',
-      module: 'trivyal',
-      columns: [
-        _i2.ColumnDefinition(
-          name: 'id',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'users_id_seq\'::regclass)',
-        ),
-        _i2.ColumnDefinition(
-          name: 'userId',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: false,
-          dartType: 'int',
-        ),
-        _i2.ColumnDefinition(
-          name: 'name',
-          columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
-        ),
-      ],
-      foreignKeys: [],
-      indexes: [
-        _i2.IndexDefinition(
-          indexName: 'users_pkey',
           tableSpace: null,
           elements: [
             _i2.IndexElementDefinition(
@@ -227,9 +197,6 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i7.Question) {
       return _i7.Question.fromJson(data) as T;
     }
-    if (t == _i8.User) {
-      return _i8.User.fromJson(data) as T;
-    }
     if (t == _i1.getType<_i4.Choice?>()) {
       return (data != null ? _i4.Choice.fromJson(data) : null) as T;
     }
@@ -242,26 +209,18 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<_i7.Question?>()) {
       return (data != null ? _i7.Question.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i8.User?>()) {
-      return (data != null ? _i8.User.fromJson(data) : null) as T;
-    }
-    if (t == _i1.getType<List<_i9.Question>?>()) {
+    if (t == _i1.getType<List<_i8.Question>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i9.Question>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i8.Question>(e)).toList()
           : null) as dynamic;
     }
-    if (t == List<_i9.Game>) {
-      return (data as List).map((e) => deserialize<_i9.Game>(e)).toList()
+    if (t == List<_i8.Game>) {
+      return (data as List).map((e) => deserialize<_i8.Game>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i9.Choice>) {
-      return (data as List).map((e) => deserialize<_i9.Choice>(e)).toList()
+    if (t == List<_i8.Choice>) {
+      return (data as List).map((e) => deserialize<_i8.Choice>(e)).toList()
           as dynamic;
-    }
-    if (t == _i1.getType<List<_i9.Game>?>()) {
-      return (data != null
-          ? (data as List).map((e) => deserialize<_i9.Game>(e)).toList()
-          : null) as dynamic;
     }
     try {
       return _i3.Protocol().deserialize<T>(data, t);
@@ -288,9 +247,6 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i7.Question) {
       return 'Question';
     }
-    if (data is _i8.User) {
-      return 'User';
-    }
     className = _i2.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod.$className';
@@ -315,9 +271,6 @@ class Protocol extends _i1.SerializationManagerServer {
     }
     if (data['className'] == 'Question') {
       return deserialize<_i7.Question>(data['data']);
-    }
-    if (data['className'] == 'User') {
-      return deserialize<_i8.User>(data['data']);
     }
     if (data['className'].startsWith('serverpod.')) {
       data['className'] = data['className'].substring(10);
@@ -349,8 +302,6 @@ class Protocol extends _i1.SerializationManagerServer {
         return _i5.Game.t;
       case _i7.Question:
         return _i7.Question.t;
-      case _i8.User:
-        return _i8.User.t;
     }
     return null;
   }

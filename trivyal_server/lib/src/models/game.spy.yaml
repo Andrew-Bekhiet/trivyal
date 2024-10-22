@@ -2,5 +2,5 @@ class: Game
 table: games
 fields:
   name: String
-  owner: User?, relation(name=user_games, onDelete=cascade)
-  questions: List<Question>?, relation(name=game_questions)
+  owner: module:auth:UserInfo?, relation(onDelete=cascade)
+  questions: List<Question>?, relation

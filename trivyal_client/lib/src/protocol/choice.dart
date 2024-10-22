@@ -13,35 +13,42 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 
 abstract class Choice implements _i1.SerializableModel {
   Choice._({
+    required this.id,
     required this.text,
-    required this.color,
+    this.color,
   });
 
   factory Choice({
+    required int id,
     required String text,
-    required int color,
+    int? color,
   }) = _ChoiceImpl;
 
   factory Choice.fromJson(Map<String, dynamic> jsonSerialization) {
     return Choice(
+      id: jsonSerialization['id'] as int,
       text: jsonSerialization['text'] as String,
-      color: jsonSerialization['color'] as int,
+      color: jsonSerialization['color'] as int?,
     );
   }
 
+  int id;
+
   String text;
 
-  int color;
+  int? color;
 
   Choice copyWith({
+    int? id,
     String? text,
     int? color,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'text': text,
-      'color': color,
+      if (color != null) 'color': color,
     };
   }
 
@@ -51,23 +58,29 @@ abstract class Choice implements _i1.SerializableModel {
   }
 }
 
+class _Undefined {}
+
 class _ChoiceImpl extends Choice {
   _ChoiceImpl({
+    required int id,
     required String text,
-    required int color,
+    int? color,
   }) : super._(
+          id: id,
           text: text,
           color: color,
         );
 
   @override
   Choice copyWith({
+    int? id,
     String? text,
-    int? color,
+    Object? color = _Undefined,
   }) {
     return Choice(
+      id: id ?? this.id,
       text: text ?? this.text,
-      color: color ?? this.color,
+      color: color is int? ? color : this.color,
     );
   }
 }

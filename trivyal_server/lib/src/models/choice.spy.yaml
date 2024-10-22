@@ -1,4 +1,5 @@
 class: Choice
 fields:
+  id: int
   text: String
-  color: int
+  color: int?
