@@ -15,7 +15,7 @@ class EditGame extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Form(
       child: FormField<Game>(
-        initialValue: game,
+        initialValue: game.copyWith(),
         builder: (state) {
           final context = state.context;
           final currentGame = state.value!;
