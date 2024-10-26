@@ -1,0 +1,12 @@
+class: LiveGame
+table: live_games
+fields:
+  pin: int
+  gameId: int, relation(parent=games)
+indexes:
+  pin_idx:
+    fields: pin
+    unique: true
+  gameId_idx:
+    fields: gameId
+    unique: true

@@ -11,8 +11,9 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../endpoints/games_endpoint.dart' as _i2;
-import 'package:trivyal_server/src/generated/game.dart' as _i3;
-import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i4;
+import '../endpoints/live_games_endpoint.dart' as _i3;
+import 'package:trivyal_server/src/generated/game.dart' as _i4;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i5;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -23,7 +24,13 @@ class Endpoints extends _i1.EndpointDispatch {
           server,
           'games',
           null,
-        )
+        ),
+      'liveGames': _i3.LiveGamesEndpoint()
+        ..initialize(
+          server,
+          'liveGames',
+          null,
+        ),
     };
     connectors['games'] = _i1.EndpointConnector(
       name: 'games',
@@ -34,7 +41,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'game': _i1.ParameterDescription(
               name: 'game',
-              type: _i1.getType<_i3.Game>(),
+              type: _i1.getType<_i4.Game>(),
               nullable: false,
             )
           },
@@ -57,7 +64,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'newGame': _i1.ParameterDescription(
               name: 'newGame',
-              type: _i1.getType<_i3.Game>(),
+              type: _i1.getType<_i4.Game>(),
               nullable: false,
             ),
           },
@@ -76,7 +83,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'game': _i1.ParameterDescription(
               name: 'game',
-              type: _i1.getType<_i3.Game>(),
+              type: _i1.getType<_i4.Game>(),
               nullable: false,
             )
           },
@@ -124,6 +131,30 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
-    modules['serverpod_auth'] = _i4.Endpoints()..initializeEndpoints(server);
+    connectors['liveGames'] = _i1.EndpointConnector(
+      name: 'liveGames',
+      endpoint: endpoints['liveGames']!,
+      methodConnectors: {
+        'startLiveGame': _i1.MethodConnector(
+          name: 'startLiveGame',
+          params: {
+            'gameId': _i1.ParameterDescription(
+              name: 'gameId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['liveGames'] as _i3.LiveGamesEndpoint).startLiveGame(
+            session,
+            params['gameId'],
+          ),
+        )
+      },
+    );
+    modules['serverpod_auth'] = _i5.Endpoints()..initializeEndpoints(server);
   }
 }

@@ -49,6 +49,19 @@ class HomeScreen extends ConsumerWidget {
                     builder: (context) => EditGame(game: game),
                   ),
                 ),
+                trailing: IconButton(
+                  icon: Icon(Symbols.play_circle),
+                  tooltip: 'Start live game',
+                  onPressed: () async {
+                    await client.liveGames.startLiveGame(game.id!);
+                    // TODO: go to lobby
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => const LobbyScreen(),
+                    //   ),
+                    // );
+                  },
+                ),
               );
             },
           );

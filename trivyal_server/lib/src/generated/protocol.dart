@@ -16,11 +16,13 @@ import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i3;
 import 'choice.dart' as _i4;
 import 'game.dart' as _i5;
 import 'game_list_response.dart' as _i6;
-import 'question.dart' as _i7;
-import 'protocol.dart' as _i8;
+import 'live_game.dart' as _i7;
+import 'question.dart' as _i8;
+import 'protocol.dart' as _i9;
 export 'choice.dart';
 export 'game.dart';
 export 'game_list_response.dart';
+export 'live_game.dart';
 export 'question.dart';
 
 class Protocol extends _i1.SerializationManagerServer {
@@ -83,6 +85,87 @@ class Protocol extends _i1.SerializationManagerServer {
           isUnique: true,
           isPrimary: true,
         )
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
+      name: 'live_games',
+      dartName: 'LiveGame',
+      schema: 'public',
+      module: 'trivyal',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'live_games_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'pin',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'gameId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'live_games_fk_0',
+          columns: ['gameId'],
+          referenceTable: 'games',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        )
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'live_games_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        ),
+        _i2.IndexDefinition(
+          indexName: 'pin_idx',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'pin',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+        _i2.IndexDefinition(
+          indexName: 'gameId_idx',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'gameId',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
       ],
       managed: true,
     ),
@@ -178,8 +261,11 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i6.GameListResponse) {
       return _i6.GameListResponse.fromJson(data) as T;
     }
-    if (t == _i7.Question) {
-      return _i7.Question.fromJson(data) as T;
+    if (t == _i7.LiveGame) {
+      return _i7.LiveGame.fromJson(data) as T;
+    }
+    if (t == _i8.Question) {
+      return _i8.Question.fromJson(data) as T;
     }
     if (t == _i1.getType<_i4.Choice?>()) {
       return (data != null ? _i4.Choice.fromJson(data) : null) as T;
@@ -190,20 +276,23 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<_i6.GameListResponse?>()) {
       return (data != null ? _i6.GameListResponse.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i7.Question?>()) {
-      return (data != null ? _i7.Question.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i7.LiveGame?>()) {
+      return (data != null ? _i7.LiveGame.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<List<_i8.Question>?>()) {
+    if (t == _i1.getType<_i8.Question?>()) {
+      return (data != null ? _i8.Question.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<List<_i9.Question>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i8.Question>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i9.Question>(e)).toList()
           : null) as dynamic;
     }
-    if (t == List<_i8.Game>) {
-      return (data as List).map((e) => deserialize<_i8.Game>(e)).toList()
+    if (t == List<_i9.Game>) {
+      return (data as List).map((e) => deserialize<_i9.Game>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i8.Choice>) {
-      return (data as List).map((e) => deserialize<_i8.Choice>(e)).toList()
+    if (t == List<_i9.Choice>) {
+      return (data as List).map((e) => deserialize<_i9.Choice>(e)).toList()
           as dynamic;
     }
     try {
@@ -228,7 +317,10 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i6.GameListResponse) {
       return 'GameListResponse';
     }
-    if (data is _i7.Question) {
+    if (data is _i7.LiveGame) {
+      return 'LiveGame';
+    }
+    if (data is _i8.Question) {
       return 'Question';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -253,8 +345,11 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data['className'] == 'GameListResponse') {
       return deserialize<_i6.GameListResponse>(data['data']);
     }
+    if (data['className'] == 'LiveGame') {
+      return deserialize<_i7.LiveGame>(data['data']);
+    }
     if (data['className'] == 'Question') {
-      return deserialize<_i7.Question>(data['data']);
+      return deserialize<_i8.Question>(data['data']);
     }
     if (data['className'].startsWith('serverpod.')) {
       data['className'] = data['className'].substring(10);
@@ -284,8 +379,10 @@ class Protocol extends _i1.SerializationManagerServer {
     switch (t) {
       case _i5.Game:
         return _i5.Game.t;
-      case _i7.Question:
-        return _i7.Question.t;
+      case _i7.LiveGame:
+        return _i7.LiveGame.t;
+      case _i8.Question:
+        return _i8.Question.t;
     }
     return null;
   }

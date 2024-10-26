@@ -4,3 +4,5 @@ games:
   - createGame:
   - updateGame:
   - deleteGame:
+liveGames:
+  - startLiveGame:

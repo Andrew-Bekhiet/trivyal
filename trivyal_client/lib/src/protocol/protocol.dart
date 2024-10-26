@@ -14,12 +14,14 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'choice.dart' as _i2;
 import 'game.dart' as _i3;
 import 'game_list_response.dart' as _i4;
-import 'question.dart' as _i5;
-import 'protocol.dart' as _i6;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i7;
+import 'live_game.dart' as _i5;
+import 'question.dart' as _i6;
+import 'protocol.dart' as _i7;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i8;
 export 'choice.dart';
 export 'game.dart';
 export 'game_list_response.dart';
+export 'live_game.dart';
 export 'question.dart';
 export 'client.dart';
 
@@ -45,8 +47,11 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i4.GameListResponse) {
       return _i4.GameListResponse.fromJson(data) as T;
     }
-    if (t == _i5.Question) {
-      return _i5.Question.fromJson(data) as T;
+    if (t == _i5.LiveGame) {
+      return _i5.LiveGame.fromJson(data) as T;
+    }
+    if (t == _i6.Question) {
+      return _i6.Question.fromJson(data) as T;
     }
     if (t == _i1.getType<_i2.Choice?>()) {
       return (data != null ? _i2.Choice.fromJson(data) : null) as T;
@@ -57,24 +62,27 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i1.getType<_i4.GameListResponse?>()) {
       return (data != null ? _i4.GameListResponse.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i5.Question?>()) {
-      return (data != null ? _i5.Question.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i5.LiveGame?>()) {
+      return (data != null ? _i5.LiveGame.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<List<_i6.Question>?>()) {
+    if (t == _i1.getType<_i6.Question?>()) {
+      return (data != null ? _i6.Question.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<List<_i7.Question>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i6.Question>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i7.Question>(e)).toList()
           : null) as dynamic;
     }
-    if (t == List<_i6.Game>) {
-      return (data as List).map((e) => deserialize<_i6.Game>(e)).toList()
+    if (t == List<_i7.Game>) {
+      return (data as List).map((e) => deserialize<_i7.Game>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i6.Choice>) {
-      return (data as List).map((e) => deserialize<_i6.Choice>(e)).toList()
+    if (t == List<_i7.Choice>) {
+      return (data as List).map((e) => deserialize<_i7.Choice>(e)).toList()
           as dynamic;
     }
     try {
-      return _i7.Protocol().deserialize<T>(data, t);
+      return _i8.Protocol().deserialize<T>(data, t);
     } on _i1.DeserializationTypeNotFoundException catch (_) {}
     return super.deserialize<T>(data, t);
   }
@@ -92,10 +100,13 @@ class Protocol extends _i1.SerializationManager {
     if (data is _i4.GameListResponse) {
       return 'GameListResponse';
     }
-    if (data is _i5.Question) {
+    if (data is _i5.LiveGame) {
+      return 'LiveGame';
+    }
+    if (data is _i6.Question) {
       return 'Question';
     }
-    className = _i7.Protocol().getClassNameForObject(data);
+    className = _i8.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod_auth.$className';
     }
@@ -113,12 +124,15 @@ class Protocol extends _i1.SerializationManager {
     if (data['className'] == 'GameListResponse') {
       return deserialize<_i4.GameListResponse>(data['data']);
     }
+    if (data['className'] == 'LiveGame') {
+      return deserialize<_i5.LiveGame>(data['data']);
+    }
     if (data['className'] == 'Question') {
-      return deserialize<_i5.Question>(data['data']);
+      return deserialize<_i6.Question>(data['data']);
     }
     if (data['className'].startsWith('serverpod_auth.')) {
       data['className'] = data['className'].substring(15);
-      return _i7.Protocol().deserializeByClassName(data);
+      return _i8.Protocol().deserializeByClassName(data);
     }
     return super.deserializeByClassName(data);
   }
