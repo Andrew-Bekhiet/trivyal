@@ -3,4 +3,4 @@ table: games
 fields:
   name: String
   owner: module:auth:UserInfo?, relation(onDelete=cascade)
-  questions: List<Question>?, relation
+  questions: List<Question>?, relation(name=games_questions)

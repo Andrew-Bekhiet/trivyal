@@ -1,7 +1,7 @@
 class: Question
 table: questions
 fields:
-  gameId: int, relation(parent=games, onDelete=cascade)
+  gameId: int, relation(name=games_questions,parent=games, onDelete=cascade)
   text: String
   choices: List<Choice>
   correctChoiceId: int

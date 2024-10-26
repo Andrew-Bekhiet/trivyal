@@ -63,8 +63,6 @@ abstract class Question implements _i1.TableRow, _i1.ProtocolSerialization {
 
   int timeInSeconds;
 
-  int? _gamesQuestionsGamesId;
-
   @override
   _i1.Table get table => t;
 
@@ -85,8 +83,6 @@ abstract class Question implements _i1.TableRow, _i1.ProtocolSerialization {
       'choices': choices.toJson(valueToJson: (v) => v.toJson()),
       'correctChoiceId': correctChoiceId,
       'timeInSeconds': timeInSeconds,
-      if (_gamesQuestionsGamesId != null)
-        '_gamesQuestionsGamesId': _gamesQuestionsGamesId,
     };
   }
 
@@ -171,49 +167,6 @@ class _QuestionImpl extends Question {
   }
 }
 
-class QuestionImplicit extends _QuestionImpl {
-  QuestionImplicit._({
-    int? id,
-    required int gameId,
-    required String text,
-    required List<_i2.Choice> choices,
-    required int correctChoiceId,
-    required int timeInSeconds,
-    this.$_gamesQuestionsGamesId,
-  }) : super(
-          id: id,
-          gameId: gameId,
-          text: text,
-          choices: choices,
-          correctChoiceId: correctChoiceId,
-          timeInSeconds: timeInSeconds,
-        );
-
-  factory QuestionImplicit(
-    Question question, {
-    int? $_gamesQuestionsGamesId,
-  }) {
-    return QuestionImplicit._(
-      id: question.id,
-      gameId: question.gameId,
-      text: question.text,
-      choices: question.choices,
-      correctChoiceId: question.correctChoiceId,
-      timeInSeconds: question.timeInSeconds,
-      $_gamesQuestionsGamesId: $_gamesQuestionsGamesId,
-    );
-  }
-
-  int? $_gamesQuestionsGamesId;
-
-  @override
-  Map<String, dynamic> toJson() {
-    var jsonMap = super.toJson();
-    jsonMap.addAll({'_gamesQuestionsGamesId': $_gamesQuestionsGamesId});
-    return jsonMap;
-  }
-}
-
 class QuestionTable extends _i1.Table {
   QuestionTable({super.tableRelation}) : super(tableName: 'questions') {
     gameId = _i1.ColumnInt(
@@ -236,10 +189,6 @@ class QuestionTable extends _i1.Table {
       'timeInSeconds',
       this,
     );
-    $_gamesQuestionsGamesId = _i1.ColumnInt(
-      '_gamesQuestionsGamesId',
-      this,
-    );
   }
 
   late final _i1.ColumnInt gameId;
@@ -252,8 +201,6 @@ class QuestionTable extends _i1.Table {
 
   late final _i1.ColumnInt timeInSeconds;
 
-  late final _i1.ColumnInt $_gamesQuestionsGamesId;
-
   @override
   List<_i1.Column> get columns => [
         id,
@@ -262,7 +209,6 @@ class QuestionTable extends _i1.Table {
         choices,
         correctChoiceId,
         timeInSeconds,
-        $_gamesQuestionsGamesId,
       ];
 }
 

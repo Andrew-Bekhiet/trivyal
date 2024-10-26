@@ -1,0 +1,45 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "questions",
+        "schema": "public",
+        "addColumns": [],
+        "deleteColumns": [
+          "_gamesQuestionsGamesId"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [
+          "questions_fk_1"
+        ],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"_gamesQuestionsGamesId\" of table \"questions\" will be dropped.",
+            "table": "questions",
+            "columns": [
+              "_gamesQuestionsGamesId"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"_gamesQuestionsGamesId\" of table \"questions\" will be dropped.",
+      "table": "questions",
+      "columns": [
+        "_gamesQuestionsGamesId"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

@@ -210,7 +210,7 @@ class GameTable extends _i1.Table {
     ___questions = _i1.createRelationTable(
       relationFieldName: '__questions',
       field: Game.t.id,
-      foreignField: _i3.Question.t.$_gamesQuestionsGamesId,
+      foreignField: _i3.Question.t.gameId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
           _i3.QuestionTable(tableRelation: foreignTableRelation),
@@ -223,7 +223,7 @@ class GameTable extends _i1.Table {
     var relationTable = _i1.createRelationTable(
       relationFieldName: 'questions',
       field: Game.t.id,
-      foreignField: _i3.Question.t.$_gamesQuestionsGamesId,
+      foreignField: _i3.Question.t.gameId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
           _i3.QuestionTable(tableRelation: foreignTableRelation),
@@ -304,10 +304,6 @@ class GameRepository {
   final attach = const GameAttachRepository._();
 
   final attachRow = const GameAttachRowRepository._();
-
-  final detach = const GameDetachRepository._();
-
-  final detachRow = const GameDetachRowRepository._();
 
   Future<List<Game>> find(
     _i1.Session session, {
@@ -477,15 +473,10 @@ class GameAttachRepository {
       throw ArgumentError.notNull('game.id');
     }
 
-    var $question = question
-        .map((e) => _i3.QuestionImplicit(
-              e,
-              $_gamesQuestionsGamesId: game.id,
-            ))
-        .toList();
+    var $question = question.map((e) => e.copyWith(gameId: game.id)).toList();
     await session.db.update<_i3.Question>(
       $question,
-      columns: [_i3.Question.t.$_gamesQuestionsGamesId],
+      columns: [_i3.Question.t.gameId],
       transaction: transaction ?? session.transaction,
     );
   }
@@ -528,63 +519,10 @@ class GameAttachRowRepository {
       throw ArgumentError.notNull('game.id');
     }
 
-    var $question = _i3.QuestionImplicit(
-      question,
-      $_gamesQuestionsGamesId: game.id,
-    );
+    var $question = question.copyWith(gameId: game.id);
     await session.db.updateRow<_i3.Question>(
       $question,
-      columns: [_i3.Question.t.$_gamesQuestionsGamesId],
-      transaction: transaction ?? session.transaction,
-    );
-  }
-}
-
-class GameDetachRepository {
-  const GameDetachRepository._();
-
-  Future<void> questions(
-    _i1.Session session,
-    List<_i3.Question> question, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (question.any((e) => e.id == null)) {
-      throw ArgumentError.notNull('question.id');
-    }
-
-    var $question = question
-        .map((e) => _i3.QuestionImplicit(
-              e,
-              $_gamesQuestionsGamesId: null,
-            ))
-        .toList();
-    await session.db.update<_i3.Question>(
-      $question,
-      columns: [_i3.Question.t.$_gamesQuestionsGamesId],
-      transaction: transaction ?? session.transaction,
-    );
-  }
-}
-
-class GameDetachRowRepository {
-  const GameDetachRowRepository._();
-
-  Future<void> questions(
-    _i1.Session session,
-    _i3.Question question, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (question.id == null) {
-      throw ArgumentError.notNull('question.id');
-    }
-
-    var $question = _i3.QuestionImplicit(
-      question,
-      $_gamesQuestionsGamesId: null,
-    );
-    await session.db.updateRow<_i3.Question>(
-      $question,
-      columns: [_i3.Question.t.$_gamesQuestionsGamesId],
+      columns: [_i3.Question.t.gameId],
       transaction: transaction ?? session.transaction,
     );
   }
