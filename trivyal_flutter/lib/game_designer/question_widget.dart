@@ -100,9 +100,10 @@ class QuestionEditor extends StatelessWidget {
                             Checkbox(
                               value:
                                   currentQuestion.correctChoiceId == choice.id,
-                              onChanged: (value) => state.didChange(
-                                  currentQuestion.copyWith(
-                                      correctChoiceId: choice.id)),
+                              onChanged: (_) {
+                                currentQuestion.correctChoiceId = choice.id;
+                                state.didChange(currentQuestion);
+                              },
                               shape: CircleBorder(),
                             ),
                             Expanded(
@@ -135,20 +136,18 @@ class QuestionEditor extends StatelessWidget {
                                         return;
                                       }
 
-                                      state.didChange(
-                                        currentQuestion.copyWith(
-                                          choices: currentQuestion.choices
-                                              .map(
-                                                (c) => c == choice
-                                                    ? choice.copyWith(
-                                                        color: selectedColor!
-                                                            .value,
-                                                      )
-                                                    : c,
-                                              )
-                                              .toList(),
-                                        ),
-                                      );
+                                      currentQuestion.choices = currentQuestion
+                                          .choices
+                                          .map(
+                                            (c) => c == choice
+                                                ? choice.copyWith(
+                                                    color: selectedColor!.value,
+                                                  )
+                                                : c,
+                                          )
+                                          .toList();
+
+                                      state.didChange(currentQuestion);
                                     },
                                   ),
                                   labelText: 'Choice',
@@ -161,14 +160,14 @@ class QuestionEditor extends StatelessWidget {
                                           icon: Icon(Symbols.close),
                                           tooltip: 'Delete choice',
                                           onPressed: () {
-                                            currentQuestion.choices
-                                                .remove(choice);
-                                            state.didChange(
-                                                currentQuestion.copyWith(
-                                              choices: currentQuestion.choices
-                                                  .where((c) => c != choice)
-                                                  .toList(),
-                                            ));
+                                            currentQuestion.choices =
+                                                currentQuestion.choices
+                                                    .where(
+                                                      (c) => c.id != choice.id,
+                                                    )
+                                                    .toList();
+
+                                            state.didChange(currentQuestion);
                                           },
                                         )
                                       : null,
@@ -185,21 +184,21 @@ class QuestionEditor extends StatelessWidget {
                       if (currentQuestion.choices.length < 4)
                         Center(
                           child: FilledButton.tonalIcon(
-                            onPressed: () => state.didChange(
-                              currentQuestion.copyWith(
-                                choices: [
-                                  ...currentQuestion.choices,
-                                  Choice(
-                                    id: currentQuestion.choices
-                                            .map((c) => c.id)
-                                            .max +
-                                        1,
-                                    text: '',
-                                    color: null,
-                                  ),
-                                ],
-                              ),
-                            ),
+                            onPressed: () {
+                              currentQuestion.choices = [
+                                ...currentQuestion.choices,
+                                Choice(
+                                  id: currentQuestion.choices
+                                          .map((c) => c.id)
+                                          .max +
+                                      1,
+                                  text: '',
+                                  color: null,
+                                ),
+                              ];
+
+                              state.didChange(currentQuestion);
+                            },
                             icon: Icon(Symbols.add),
                             label: Text('Add choice'),
                           ),
