@@ -126,7 +126,7 @@ class EditGame extends ConsumerWidget {
         );
       }
 
-      navigator.pop();
+      navigator.pop(true);
     } catch (e) {
       scaffoldMessenger.showSnackBar(
         SnackBar(

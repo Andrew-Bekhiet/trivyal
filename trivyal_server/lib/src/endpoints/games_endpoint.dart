@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:serverpod/serverpod.dart';
 import 'package:trivyal_server/src/generated/protocol.dart';
-import 'package:trivyal_server/src/realtime/realtime_helper.dart';
 
 class GamesEndpoint extends Endpoint {
   static final EqualityBy<Question, dynamic> questionEquality = EqualityBy(
@@ -20,43 +19,33 @@ class GamesEndpoint extends Endpoint {
     ),
   );
 
-  Stream<GameListResponse> watchAll(Session session) async* {
+  Future<GameListResponse> list(Session session) async {
     final user = await _assertAuthenticated(session);
 
-    yield* session.watchAll(
-      fetchFromDB: () async => await Game.db.find(
-        session,
-        where: (g) => g.ownerId.equals(user.userId),
-        orderBy: (g) => g.name,
-        include: Game.include(questions: Question.includeList()),
-      ),
-      shouldProcessEvent: (_, data) => data.ownerId == user.userId,
-      transform: (data) =>
-          data.where((g) => g.ownerId == user.userId).sortedBy((g) => g.name),
-      toResponse: (data) => GameListResponse(data: data),
+    final games = await Game.db.find(
+      session,
+      where: (g) => g.ownerId.equals(user.userId),
+      orderBy: (g) => g.name,
+      include: Game.include(questions: Question.includeList()),
     );
+
+    return GameListResponse(data: games);
   }
 
-  Stream<Game?> watchSingle(Session session, int id) async* {
+  Future<Game?> get(Session session, int id) async {
     final user = await _assertAuthenticated(session);
 
-    yield* session.watchSingle(
-      fetchFromDB: () async {
-        final game = await Game.db.findById(
-          session,
-          id,
-          include: Game.include(questions: Question.includeList()),
-        );
-
-        if (game?.ownerId != user.userId) {
-          return null;
-        }
-
-        return game;
-      },
-      shouldProcessEvent: (_, data) => data.ownerId == user.userId,
-      toResponse: (data) => data,
+    final game = await Game.db.findById(
+      session,
+      id,
+      include: Game.include(questions: Question.includeList()),
     );
+
+    if (game?.ownerId != user.userId) {
+      return null;
+    }
+
+    return game;
   }
 
   Future<Game> createGame(Session session, Game game) async {
@@ -83,9 +72,6 @@ class GamesEndpoint extends Endpoint {
 
       return createdGameRow.copyWith(questions: createdQuestions);
     });
-
-    await session.messages
-        .postMessage('$Game.${ObjectWriteEvent.created.name}', created);
 
     return created;
   }
@@ -163,9 +149,6 @@ class GamesEndpoint extends Endpoint {
       },
     );
 
-    await session.messages
-        .postMessage('$Game.${ObjectWriteEvent.updated.name}', updated);
-
     return updated;
   }
 
@@ -201,9 +184,7 @@ class GamesEndpoint extends Endpoint {
 
     _assertUserIsGameOwner(user, game);
 
-    final deleted = await Game.db.deleteRow(session, game);
-    await session.messages
-        .postMessage('$Game.${ObjectWriteEvent.deleted.name}', deleted);
+    await Game.db.deleteRow(session, game);
   }
 
   void _assertUserIsGameOwner(AuthenticationInfo user, Game game) {

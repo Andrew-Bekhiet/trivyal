@@ -5,19 +5,24 @@ import 'package:trivyal_client/trivyal_client.dart';
 import 'package:trivyal_flutter/game_designer/edit_game.dart';
 import 'package:trivyal_flutter/utils/providers.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
+  Widget build(BuildContext context) {
     final client = ref.watch(clientProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Trivyal'),
       ),
-      body: StreamBuilder<List<Game>>(
-        stream: client.games.watchAll().map((r) => r.data),
+      body: FutureBuilder<List<Game>>(
+        future: client.games.list().then((r) => r.data),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return ErrorWidget(snapshot.error!);
@@ -44,11 +49,15 @@ class HomeScreen extends ConsumerWidget {
 
               return ListTile(
                 title: Text(game.name),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => EditGame(game: game),
-                  ),
-                ),
+                onTap: () async {
+                  final updated = await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => EditGame(game: game),
+                    ),
+                  );
+
+                  if (updated == true) setState(() {});
+                },
                 trailing: IconButton(
                   icon: Icon(Symbols.play_circle),
                   tooltip: 'Start live game',
@@ -68,30 +77,34 @@ class HomeScreen extends ConsumerWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => EditGame(
-              game: Game(
-                name: 'New Game',
-                ownerId: ref.read(sessionManagerProvider).signedInUser!.id!,
-                questions: [
-                  Question(
-                    gameId: -1,
-                    text: '',
-                    timeInSeconds: 30,
-                    choices: [
-                      Choice(id: 0, text: ''),
-                      Choice(id: 1, text: ''),
-                      Choice(id: 2, text: ''),
-                      Choice(id: 3, text: '')
-                    ],
-                    correctChoiceId: 0,
-                  ),
-                ],
+        onPressed: () async {
+          final added = await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => EditGame(
+                game: Game(
+                  name: 'New Game',
+                  ownerId: ref.read(sessionManagerProvider).signedInUser!.id!,
+                  questions: [
+                    Question(
+                      gameId: -1,
+                      text: '',
+                      timeInSeconds: 30,
+                      choices: [
+                        Choice(id: 0, text: ''),
+                        Choice(id: 1, text: ''),
+                        Choice(id: 2, text: ''),
+                        Choice(id: 3, text: '')
+                      ],
+                      correctChoiceId: 0,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ),
+          );
+
+          if (added == true) setState(() {});
+        },
         child: const Icon(Symbols.add),
       ),
     );

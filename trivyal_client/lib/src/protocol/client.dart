@@ -24,21 +24,17 @@ class EndpointGames extends _i1.EndpointRef {
   @override
   String get name => 'games';
 
-  _i2.Stream<_i3.GameListResponse> watchAll() =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i3.GameListResponse>,
-          _i3.GameListResponse>(
+  _i2.Future<_i3.GameListResponse> list() =>
+      caller.callServerEndpoint<_i3.GameListResponse>(
         'games',
-        'watchAll',
-        {},
+        'list',
         {},
       );
 
-  _i2.Stream<_i4.Game?> watchSingle(int id) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i4.Game?>, _i4.Game?>(
+  _i2.Future<_i4.Game?> get(int id) => caller.callServerEndpoint<_i4.Game?>(
         'games',
-        'watchSingle',
+        'get',
         {'id': id},
-        {},
       );
 
   _i2.Future<_i4.Game> createGame(_i4.Game game) =>

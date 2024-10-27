@@ -36,6 +36,33 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'games',
       endpoint: endpoints['games']!,
       methodConnectors: {
+        'list': _i1.MethodConnector(
+          name: 'list',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['games'] as _i2.GamesEndpoint).list(session),
+        ),
+        'get': _i1.MethodConnector(
+          name: 'get',
+          params: {
+            'id': _i1.ParameterDescription(
+              name: 'id',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['games'] as _i2.GamesEndpoint).get(
+            session,
+            params['id'],
+          ),
+        ),
         'createGame': _i1.MethodConnector(
           name: 'createGame',
           params: {
@@ -94,39 +121,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['games'] as _i2.GamesEndpoint).deleteGame(
             session,
             params['game'],
-          ),
-        ),
-        'watchAll': _i1.MethodStreamConnector(
-          name: 'watchAll',
-          params: {},
-          streamParams: {},
-          returnType: _i1.MethodStreamReturnType.streamType,
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-            Map<String, Stream> streamParams,
-          ) =>
-              (endpoints['games'] as _i2.GamesEndpoint).watchAll(session),
-        ),
-        'watchSingle': _i1.MethodStreamConnector(
-          name: 'watchSingle',
-          params: {
-            'id': _i1.ParameterDescription(
-              name: 'id',
-              type: _i1.getType<int>(),
-              nullable: false,
-            )
-          },
-          streamParams: {},
-          returnType: _i1.MethodStreamReturnType.streamType,
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-            Map<String, Stream> streamParams,
-          ) =>
-              (endpoints['games'] as _i2.GamesEndpoint).watchSingle(
-            session,
-            params['id'],
           ),
         ),
       },
