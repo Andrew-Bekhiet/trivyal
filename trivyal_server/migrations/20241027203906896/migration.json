@@ -1,0 +1,152 @@
+{
+  "actions": [
+    {
+      "type": "deleteTable",
+      "deleteTable": "live_games"
+    },
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "live_games",
+        "dartName": "LiveGame",
+        "module": "trivyal",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('live_games_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "name": "pin",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "gameId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "players",
+            "columnType": 8,
+            "isNullable": false,
+            "dartType": "List<String>"
+          },
+          {
+            "name": "currentStatus",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "protocol:LiveGameStatus"
+          },
+          {
+            "name": "currentQuestion",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "protocol:Question?"
+          },
+          {
+            "name": "currentQuestionIndex",
+            "columnType": 6,
+            "isNullable": true,
+            "dartType": "int?"
+          },
+          {
+            "name": "currentQuestionShowTime",
+            "columnType": 4,
+            "isNullable": true,
+            "dartType": "DateTime?"
+          },
+          {
+            "name": "currentResults",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "Map<String,int>?"
+          },
+          {
+            "name": "playerAnswers",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "Map<String,int>?"
+          },
+          {
+            "name": "playerAnswersTime",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "Map<String,DateTime>?"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "constraintName": "live_games_fk_0",
+            "columns": [
+              "gameId"
+            ],
+            "referenceTable": "games",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          }
+        ],
+        "indexes": [
+          {
+            "indexName": "live_games_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          },
+          {
+            "indexName": "pin_idx",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "pin"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": false
+          },
+          {
+            "indexName": "gameId_idx",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "gameId"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": false
+          }
+        ],
+        "managed": true
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "tableDropped",
+      "message": "One or more columns are added to table \"live_games\" which cannot be added in a table migration. The complete table will be deleted and recreated.",
+      "table": "live_games",
+      "columns": [
+        "players"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

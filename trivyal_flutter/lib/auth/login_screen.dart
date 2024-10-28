@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:serverpod_auth_google_flutter/serverpod_auth_google_flutter.dart';
+import 'package:trivyal_flutter/gameplay/game_shelll_screen.dart';
 
 import '../utils/providers.dart';
 import '../utils/secrets.dart';
@@ -14,6 +17,9 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
+  final TextEditingController _pinController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -53,29 +59,102 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ? 2 * size.width / 5
                       : size.width,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    TextFormField(
-                      maxLength: 6,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                child: Form(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      TextFormField(
+                        maxLength: 6,
+                        controller: _pinController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          label: Text('Game PIN', textAlign: TextAlign.center),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          floatingLabelAlignment: FloatingLabelAlignment.center,
                         ),
-                        label: Text('Game PIN', textAlign: TextAlign.center),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        floatingLabelAlignment: FloatingLabelAlignment.center,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        keyboardType: TextInputType.number,
+                        textAlign: TextAlign.center,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a game PIN';
+                          } else if (value.length != 6 ||
+                              int.tryParse(value) == null) {
+                            return 'Please enter a valid game PIN';
+                          }
+                          return null;
+                        },
                       ),
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.center,
-                    ),
-                    FilledButton(
-                      child: const Text('Enter!'),
-                      onPressed: () {},
-                    ),
-                  ],
+                      TextFormField(
+                        controller: _nameController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          label: Text('Your name', textAlign: TextAlign.center),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          floatingLabelAlignment: FloatingLabelAlignment.center,
+                        ),
+                        textAlign: TextAlign.center,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your name';
+                          }
+                          return null;
+                        },
+                      ),
+                      Builder(
+                        builder: (context) {
+                          return FilledButton(
+                            child: const Text('Enter!'),
+                            onPressed: () {
+                              if (!Form.of(context).validate()) return;
+
+                              final scaffoldMessenger =
+                                  ScaffoldMessenger.of(context);
+
+                              final streamController = StreamController<int>();
+                              try {
+                                final liveGameStream =
+                                    client.liveGames.joinLiveGame(
+                                  pin: int.parse(_pinController.text),
+                                  playerName: _nameController.text,
+                                  answerIdStream: streamController.stream,
+                                );
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => GameShellScreen(
+                                      playerName: _nameController.text,
+                                      liveGameStream: liveGameStream,
+                                      liveGamePlayerSink: streamController.sink,
+                                    ),
+                                  ),
+                                );
+                              } catch (e) {
+                                streamController.close();
+
+                                if (e
+                                    .toString()
+                                    .contains('Live game not found')) {
+                                  scaffoldMessenger.showSnackBar(SnackBar(
+                                    content: Text('Live game not found'),
+                                    backgroundColor: Colors.red,
+                                  ));
+                                }
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Text(

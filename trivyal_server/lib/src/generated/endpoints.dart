@@ -13,7 +13,8 @@ import 'package:serverpod/serverpod.dart' as _i1;
 import '../endpoints/games_endpoint.dart' as _i2;
 import '../endpoints/live_games_endpoint.dart' as _i3;
 import 'package:trivyal_server/src/generated/game.dart' as _i4;
-import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i5;
+import 'package:trivyal_server/src/generated/live_game_admin_event.dart' as _i5;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i6;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -129,8 +130,8 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'liveGames',
       endpoint: endpoints['liveGames']!,
       methodConnectors: {
-        'startLiveGame': _i1.MethodConnector(
-          name: 'startLiveGame',
+        'startOrJoinLiveGame': _i1.MethodStreamConnector(
+          name: 'startOrJoinLiveGame',
           params: {
             'gameId': _i1.ParameterDescription(
               name: 'gameId',
@@ -138,17 +139,62 @@ class Endpoints extends _i1.EndpointDispatch {
               nullable: false,
             )
           },
+          streamParams: {
+            'adminMessages':
+                _i1.StreamParameterDescription<_i5.LiveGameAdminEvent>(
+              name: 'adminMessages',
+              nullable: false,
+            )
+          },
+          returnType: _i1.MethodStreamReturnType.streamType,
           call: (
             _i1.Session session,
             Map<String, dynamic> params,
-          ) async =>
-              (endpoints['liveGames'] as _i3.LiveGamesEndpoint).startLiveGame(
+            Map<String, Stream> streamParams,
+          ) =>
+              (endpoints['liveGames'] as _i3.LiveGamesEndpoint)
+                  .startOrJoinLiveGame(
             session,
-            params['gameId'],
+            gameId: params['gameId'],
+            adminMessages:
+                streamParams['adminMessages']!.cast<_i5.LiveGameAdminEvent>(),
           ),
-        )
+        ),
+        'joinLiveGame': _i1.MethodStreamConnector(
+          name: 'joinLiveGame',
+          params: {
+            'pin': _i1.ParameterDescription(
+              name: 'pin',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'playerName': _i1.ParameterDescription(
+              name: 'playerName',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          streamParams: {
+            'answerIdStream': _i1.StreamParameterDescription<int>(
+              name: 'answerIdStream',
+              nullable: false,
+            )
+          },
+          returnType: _i1.MethodStreamReturnType.streamType,
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+            Map<String, Stream> streamParams,
+          ) =>
+              (endpoints['liveGames'] as _i3.LiveGamesEndpoint).joinLiveGame(
+            session,
+            pin: params['pin'],
+            playerName: params['playerName'],
+            answerIdStream: streamParams['answerIdStream']!.cast<int>(),
+          ),
+        ),
       },
     );
-    modules['serverpod_auth'] = _i5.Endpoints()..initializeEndpoints(server);
+    modules['serverpod_auth'] = _i6.Endpoints()..initializeEndpoints(server);
   }
 }

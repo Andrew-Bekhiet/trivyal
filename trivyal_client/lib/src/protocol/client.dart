@@ -14,8 +14,9 @@ import 'dart:async' as _i2;
 import 'package:trivyal_client/src/protocol/game_list_response.dart' as _i3;
 import 'package:trivyal_client/src/protocol/game.dart' as _i4;
 import 'package:trivyal_client/src/protocol/live_game.dart' as _i5;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i6;
-import 'protocol.dart' as _i7;
+import 'package:trivyal_client/src/protocol/live_game_admin_event.dart' as _i6;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i7;
+import 'protocol.dart' as _i8;
 
 /// {@category Endpoint}
 class EndpointGames extends _i1.EndpointRef {
@@ -71,20 +72,41 @@ class EndpointLiveGames extends _i1.EndpointRef {
   @override
   String get name => 'liveGames';
 
-  _i2.Future<_i5.LiveGame> startLiveGame(int gameId) =>
-      caller.callServerEndpoint<_i5.LiveGame>(
+  _i2.Stream<_i5.LiveGame> startOrJoinLiveGame({
+    required int gameId,
+    required _i2.Stream<_i6.LiveGameAdminEvent> adminMessages,
+  }) =>
+      caller
+          .callStreamingServerEndpoint<_i2.Stream<_i5.LiveGame>, _i5.LiveGame>(
         'liveGames',
-        'startLiveGame',
+        'startOrJoinLiveGame',
         {'gameId': gameId},
+        {'adminMessages': adminMessages},
+      );
+
+  _i2.Stream<_i5.LiveGame> joinLiveGame({
+    required int pin,
+    required String playerName,
+    required _i2.Stream<int> answerIdStream,
+  }) =>
+      caller
+          .callStreamingServerEndpoint<_i2.Stream<_i5.LiveGame>, _i5.LiveGame>(
+        'liveGames',
+        'joinLiveGame',
+        {
+          'pin': pin,
+          'playerName': playerName,
+        },
+        {'answerIdStream': answerIdStream},
       );
 }
 
 class _Modules {
   _Modules(Client client) {
-    auth = _i6.Caller(client);
+    auth = _i7.Caller(client);
   }
 
-  late final _i6.Caller auth;
+  late final _i7.Caller auth;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -103,7 +125,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i7.Protocol(),
+          _i8.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,

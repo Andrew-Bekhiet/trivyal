@@ -1,0 +1,4 @@
+class: LiveGameAnswer
+fields:
+  player: String
+  answerId: int

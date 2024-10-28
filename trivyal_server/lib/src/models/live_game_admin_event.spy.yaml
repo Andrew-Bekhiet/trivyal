@@ -1,0 +1,6 @@
+enum: LiveGameAdminEvent
+serialized: byName
+values:
+  - startGame
+  - showPodium
+  - nextQuestion

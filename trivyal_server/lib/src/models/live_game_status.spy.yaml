@@ -1,0 +1,9 @@
+enum: LiveGameStatus
+serialized: byName
+values:
+  - lobby
+  - starting
+  - answeringQuestion
+  - revealingAnswer
+  - podium
+  - results

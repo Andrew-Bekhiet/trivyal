@@ -3,6 +3,14 @@ table: live_games
 fields:
   pin: int
   gameId: int, relation(parent=games)
+  players: List<String>
+  currentStatus: LiveGameStatus
+  currentQuestion: Question?
+  currentQuestionIndex: int?
+  currentQuestionShowTime: DateTime?
+  currentResults: Map<String, int>
+  playerAnswers: Map<String, int>
+  playerAnswersTime: Map<String, DateTime>
 indexes:
   pin_idx:
     fields: pin

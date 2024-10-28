@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:trivyal_client/trivyal_client.dart';
 import 'package:trivyal_flutter/game_designer/edit_game.dart';
+import 'package:trivyal_flutter/gameplay/game_shelll_screen.dart';
 import 'package:trivyal_flutter/utils/providers.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -62,13 +65,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   icon: Icon(Symbols.play_circle),
                   tooltip: 'Start live game',
                   onPressed: () async {
-                    await client.liveGames.startLiveGame(game.id!);
-                    // TODO: go to lobby
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const LobbyScreen(),
-                    //   ),
-                    // );
+                    final navigator = Navigator.of(context);
+
+                    final streamController =
+                        StreamController<LiveGameAdminEvent>();
+
+                    try {
+                      final liveGameStream =
+                          client.liveGames.startOrJoinLiveGame(
+                        gameId: game.id!,
+                        adminMessages: streamController.stream,
+                      );
+
+                      navigator.push(
+                        MaterialPageRoute(
+                          builder: (context) => GameShellScreen(
+                            liveGameStream: liveGameStream,
+                            liveGameAdminSink: streamController.sink,
+                          ),
+                        ),
+                      );
+                    } catch (_) {
+                      streamController.close();
+                    }
                   },
                 ),
               );

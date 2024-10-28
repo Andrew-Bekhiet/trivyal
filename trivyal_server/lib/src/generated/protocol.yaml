@@ -5,4 +5,5 @@ games:
   - updateGame:
   - deleteGame:
 liveGames:
-  - startLiveGame:
+  - startOrJoinLiveGame:
+  - joinLiveGame:

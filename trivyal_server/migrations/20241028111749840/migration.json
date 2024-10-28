@@ -1,0 +1,96 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "live_games",
+        "schema": "public",
+        "addColumns": [],
+        "deleteColumns": [],
+        "modifyColumns": [
+          {
+            "columnName": "currentResults",
+            "addNullable": false,
+            "removeNullable": true,
+            "changeDefault": false
+          },
+          {
+            "columnName": "playerAnswers",
+            "addNullable": false,
+            "removeNullable": true,
+            "changeDefault": false
+          },
+          {
+            "columnName": "playerAnswersTime",
+            "addNullable": false,
+            "removeNullable": true,
+            "changeDefault": false
+          }
+        ],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "notNullAdded",
+            "message": "Column currentResults of table live_games is modified to be not null. If there are existing rows with null values, this migration will fail.",
+            "table": "live_games",
+            "columns": [
+              "currentResults"
+            ],
+            "destrucive": false
+          },
+          {
+            "type": "notNullAdded",
+            "message": "Column playerAnswers of table live_games is modified to be not null. If there are existing rows with null values, this migration will fail.",
+            "table": "live_games",
+            "columns": [
+              "playerAnswers"
+            ],
+            "destrucive": false
+          },
+          {
+            "type": "notNullAdded",
+            "message": "Column playerAnswersTime of table live_games is modified to be not null. If there are existing rows with null values, this migration will fail.",
+            "table": "live_games",
+            "columns": [
+              "playerAnswersTime"
+            ],
+            "destrucive": false
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "notNullAdded",
+      "message": "Column currentResults of table live_games is modified to be not null. If there are existing rows with null values, this migration will fail.",
+      "table": "live_games",
+      "columns": [
+        "currentResults"
+      ],
+      "destrucive": false
+    },
+    {
+      "type": "notNullAdded",
+      "message": "Column playerAnswers of table live_games is modified to be not null. If there are existing rows with null values, this migration will fail.",
+      "table": "live_games",
+      "columns": [
+        "playerAnswers"
+      ],
+      "destrucive": false
+    },
+    {
+      "type": "notNullAdded",
+      "message": "Column playerAnswersTime of table live_games is modified to be not null. If there are existing rows with null values, this migration will fail.",
+      "table": "live_games",
+      "columns": [
+        "playerAnswersTime"
+      ],
+      "destrucive": false
+    }
+  ],
+  "migrationApiVersion": 1
+}

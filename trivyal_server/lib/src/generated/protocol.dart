@@ -17,12 +17,18 @@ import 'choice.dart' as _i4;
 import 'game.dart' as _i5;
 import 'game_list_response.dart' as _i6;
 import 'live_game.dart' as _i7;
-import 'question.dart' as _i8;
-import 'protocol.dart' as _i9;
+import 'live_game_admin_event.dart' as _i8;
+import 'live_game_answer.dart' as _i9;
+import 'live_game_status.dart' as _i10;
+import 'question.dart' as _i11;
+import 'protocol.dart' as _i12;
 export 'choice.dart';
 export 'game.dart';
 export 'game_list_response.dart';
 export 'live_game.dart';
+export 'live_game_admin_event.dart';
+export 'live_game_answer.dart';
+export 'live_game_status.dart';
 export 'question.dart';
 
 class Protocol extends _i1.SerializationManagerServer {
@@ -112,6 +118,54 @@ class Protocol extends _i1.SerializationManagerServer {
           columnType: _i2.ColumnType.bigint,
           isNullable: false,
           dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'players',
+          columnType: _i2.ColumnType.json,
+          isNullable: false,
+          dartType: 'List<String>',
+        ),
+        _i2.ColumnDefinition(
+          name: 'currentStatus',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'protocol:LiveGameStatus',
+        ),
+        _i2.ColumnDefinition(
+          name: 'currentQuestion',
+          columnType: _i2.ColumnType.json,
+          isNullable: true,
+          dartType: 'protocol:Question?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'currentQuestionIndex',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'currentQuestionShowTime',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'currentResults',
+          columnType: _i2.ColumnType.json,
+          isNullable: false,
+          dartType: 'Map<String,int>',
+        ),
+        _i2.ColumnDefinition(
+          name: 'playerAnswers',
+          columnType: _i2.ColumnType.json,
+          isNullable: false,
+          dartType: 'Map<String,int>',
+        ),
+        _i2.ColumnDefinition(
+          name: 'playerAnswersTime',
+          columnType: _i2.ColumnType.json,
+          isNullable: false,
+          dartType: 'Map<String,DateTime>',
         ),
       ],
       foreignKeys: [
@@ -264,8 +318,17 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i7.LiveGame) {
       return _i7.LiveGame.fromJson(data) as T;
     }
-    if (t == _i8.Question) {
-      return _i8.Question.fromJson(data) as T;
+    if (t == _i8.LiveGameAdminEvent) {
+      return _i8.LiveGameAdminEvent.fromJson(data) as T;
+    }
+    if (t == _i9.LiveGameAnswer) {
+      return _i9.LiveGameAnswer.fromJson(data) as T;
+    }
+    if (t == _i10.LiveGameStatus) {
+      return _i10.LiveGameStatus.fromJson(data) as T;
+    }
+    if (t == _i11.Question) {
+      return _i11.Question.fromJson(data) as T;
     }
     if (t == _i1.getType<_i4.Choice?>()) {
       return (data != null ? _i4.Choice.fromJson(data) : null) as T;
@@ -279,20 +342,43 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<_i7.LiveGame?>()) {
       return (data != null ? _i7.LiveGame.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i8.Question?>()) {
-      return (data != null ? _i8.Question.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i8.LiveGameAdminEvent?>()) {
+      return (data != null ? _i8.LiveGameAdminEvent.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<List<_i9.Question>?>()) {
+    if (t == _i1.getType<_i9.LiveGameAnswer?>()) {
+      return (data != null ? _i9.LiveGameAnswer.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i10.LiveGameStatus?>()) {
+      return (data != null ? _i10.LiveGameStatus.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i11.Question?>()) {
+      return (data != null ? _i11.Question.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<List<_i12.Question>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i9.Question>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i12.Question>(e)).toList()
           : null) as dynamic;
     }
-    if (t == List<_i9.Game>) {
-      return (data as List).map((e) => deserialize<_i9.Game>(e)).toList()
+    if (t == List<_i12.Game>) {
+      return (data as List).map((e) => deserialize<_i12.Game>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i9.Choice>) {
-      return (data as List).map((e) => deserialize<_i9.Choice>(e)).toList()
+    if (t == List<String>) {
+      return (data as List).map((e) => deserialize<String>(e)).toList()
+          as dynamic;
+    }
+    if (t == Map<String, int>) {
+      return (data as Map).map(
+              (k, v) => MapEntry(deserialize<String>(k), deserialize<int>(v)))
+          as dynamic;
+    }
+    if (t == Map<String, DateTime>) {
+      return (data as Map).map((k, v) =>
+              MapEntry(deserialize<String>(k), deserialize<DateTime>(v)))
+          as dynamic;
+    }
+    if (t == List<_i12.Choice>) {
+      return (data as List).map((e) => deserialize<_i12.Choice>(e)).toList()
           as dynamic;
     }
     try {
@@ -320,7 +406,16 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i7.LiveGame) {
       return 'LiveGame';
     }
-    if (data is _i8.Question) {
+    if (data is _i8.LiveGameAdminEvent) {
+      return 'LiveGameAdminEvent';
+    }
+    if (data is _i9.LiveGameAnswer) {
+      return 'LiveGameAnswer';
+    }
+    if (data is _i10.LiveGameStatus) {
+      return 'LiveGameStatus';
+    }
+    if (data is _i11.Question) {
       return 'Question';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -348,8 +443,17 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data['className'] == 'LiveGame') {
       return deserialize<_i7.LiveGame>(data['data']);
     }
+    if (data['className'] == 'LiveGameAdminEvent') {
+      return deserialize<_i8.LiveGameAdminEvent>(data['data']);
+    }
+    if (data['className'] == 'LiveGameAnswer') {
+      return deserialize<_i9.LiveGameAnswer>(data['data']);
+    }
+    if (data['className'] == 'LiveGameStatus') {
+      return deserialize<_i10.LiveGameStatus>(data['data']);
+    }
     if (data['className'] == 'Question') {
-      return deserialize<_i8.Question>(data['data']);
+      return deserialize<_i11.Question>(data['data']);
     }
     if (data['className'].startsWith('serverpod.')) {
       data['className'] = data['className'].substring(10);
@@ -381,8 +485,8 @@ class Protocol extends _i1.SerializationManagerServer {
         return _i5.Game.t;
       case _i7.LiveGame:
         return _i7.LiveGame.t;
-      case _i8.Question:
-        return _i8.Question.t;
+      case _i11.Question:
+        return _i11.Question.t;
     }
     return null;
   }
