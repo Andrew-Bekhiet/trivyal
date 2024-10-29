@@ -44,7 +44,13 @@ class _GameShellScreenState extends ConsumerState<GameShellScreen>
       stream: widget.liveGameStream,
       builder: (context, liveGameSnapshot) {
         if (liveGameSnapshot.hasError && !liveGameSnapshot.hasData) {
-          return ErrorWidget(liveGameSnapshot.error!);
+          return Scaffold(
+            body: Center(
+              child: Text(
+                'Oops! Something went wrong!\n\n${liveGameSnapshot.error}',
+              ),
+            ),
+          );
         }
 
         if (!liveGameSnapshot.hasData) {
