@@ -38,9 +38,18 @@ class _AnsweringQuestionsWidgetState extends State<AnsweringQuestionsWidget>
   void didUpdateWidget(covariant AnsweringQuestionsWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.liveGame.currentQuestion?.correctChoiceId !=
-        widget.liveGame.currentQuestion?.correctChoiceId) {
-      currentQuestion = widget.liveGame.currentQuestion!;
+    final Question oldQuestion = oldWidget.liveGame.currentQuestion!;
+    final Question newQuestion = widget.liveGame.currentQuestion!;
+
+    if (oldQuestion.correctChoiceId != newQuestion.correctChoiceId) {
+      currentQuestion = newQuestion;
+    }
+
+    if (oldQuestion.id != newQuestion.id) {
+      hasAnswered = false;
+      if (widget.liveGame.currentStatus == LiveGameStatus.answeringQuestion) {
+        _timerController.forward(from: 0);
+      }
     }
   }
 
