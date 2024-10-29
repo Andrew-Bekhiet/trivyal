@@ -43,4 +43,4 @@ EXPOSE 8082
 ARG CONFIG_GOOGLE_CLIENT_SECRET
 RUN echo $CONFIG_GOOGLE_CLIENT_SECRET | base64 -d > ./config/google_client_secret.json
 
-ENTRYPOINT ./server --mode=$runmode --server-id=$serverid --logging=$logging --role=$role
+ENTRYPOINT ./server --mode=$runmode --server-id=$serverid --logging=$logging --role=$role --apply-migrations
