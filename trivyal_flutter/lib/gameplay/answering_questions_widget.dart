@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:trivyal_client/trivyal_client.dart';
@@ -59,9 +61,13 @@ class _AnsweringQuestionsWidgetState extends State<AnsweringQuestionsWidget>
       children: [
         Expanded(
           child: Center(
-            child: Text(
-              currentQuestion.text,
-              style: TextStyle(fontSize: 35),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                currentQuestion.text,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 35),
+              ),
             ),
           ),
         ),
@@ -87,61 +93,77 @@ class _AnsweringQuestionsWidgetState extends State<AnsweringQuestionsWidget>
               ),
             ),
           ),
-        if (hasAnswered &&
-            widget.liveGame.currentStatus == LiveGameStatus.answeringQuestion)
-          Column(
-            mainAxisSize: MainAxisSize.min,
+        ClipRect(
+          child: Stack(
+            alignment: Alignment.center,
             children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 10),
-              Text('Waiting for other players to answer...'),
-            ],
-          )
-        else
-          GridView(
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              mainAxisExtent: 50,
-            ),
-            padding: const EdgeInsets.all(8),
-            children: [
-              for (final choice in currentQuestion.choices)
-                if (widget.liveGame.currentStatus ==
-                    LiveGameStatus.revealingAnswer)
-                  FilledButton.icon(
-                    onPressed: choice.id == currentQuestion.correctChoiceId
-                        ? () {}
-                        : null,
-                    style: FilledButton.styleFrom(
-                      backgroundColor:
-                          choice.color != null ? Color(choice.color!) : null,
-                      textStyle: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    icon: choice.id == currentQuestion.correctChoiceId
-                        ? Icon(Symbols.check, size: 40)
-                        : Icon(Symbols.close, size: 40),
-                    label: Text(choice.text),
-                  )
-                else
-                  FilledButton(
-                    onPressed: () {
-                      if (widget.onAnswer != null) {
-                        widget.onAnswer?.call(choice.id);
-                        setState(() => hasAnswered = true);
-                      }
-                    },
-                    style: FilledButton.styleFrom(
-                      backgroundColor:
-                          choice.color != null ? Color(choice.color!) : null,
-                      textStyle: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    child: Text(choice.text),
+              GridView(
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                  mainAxisExtent: 70,
+                ),
+                padding: const EdgeInsets.all(8),
+                children: [
+                  for (final choice in currentQuestion.choices)
+                    if (widget.liveGame.currentStatus ==
+                        LiveGameStatus.revealingAnswer)
+                      FilledButton.icon(
+                        onPressed: choice.id == currentQuestion.correctChoiceId
+                            ? () {}
+                            : null,
+                        style: FilledButton.styleFrom(
+                          backgroundColor: choice.color != null
+                              ? Color(choice.color!)
+                              : null,
+                          textStyle: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        icon: choice.id == currentQuestion.correctChoiceId
+                            ? Icon(Symbols.check, size: 30)
+                            : Icon(Symbols.close, size: 30),
+                        label: Text(choice.text, textAlign: TextAlign.center),
+                      )
+                    else
+                      FilledButton(
+                        onPressed: () {
+                          if (widget.onAnswer != null) {
+                            widget.onAnswer?.call(choice.id);
+                            setState(() => hasAnswered = true);
+                          }
+                        },
+                        style: FilledButton.styleFrom(
+                          backgroundColor: choice.color != null
+                              ? Color(choice.color!)
+                              : null,
+                          textStyle: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        child: Text(choice.text, textAlign: TextAlign.center),
+                      ),
+                ],
+              ),
+              if (hasAnswered &&
+                  widget.liveGame.currentStatus ==
+                      LiveGameStatus.answeringQuestion) ...[
+                BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CircularProgressIndicator(color: Colors.deepPurpleAccent),
+                      SizedBox(height: 10),
+                      Text(
+                        'Waiting for other players to answer...',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ],
                   ),
+                ),
+              ],
             ],
           ),
+        ),
         SizedBox(height: 20),
       ],
     );
