@@ -28,10 +28,10 @@ class GameShellScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<GameShellScreen> createState() => _LobbyScreenState();
+  ConsumerState<GameShellScreen> createState() => _GameShellScreenState();
 }
 
-class _LobbyScreenState extends ConsumerState<GameShellScreen>
+class _GameShellScreenState extends ConsumerState<GameShellScreen>
     with TickerProviderStateMixin {
   Map<String, int> lastResults = {};
 
